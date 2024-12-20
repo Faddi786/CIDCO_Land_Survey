@@ -1,0 +1,22 @@
+
+    /* Styling for the table and buttons */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+    }
+    button {
+      padding: 5px 10px;
+      margin: 2px;
+      cursor: pointer;
+    }
+    .editBtn, .saveBtn, .cancelBtn, .deleteBtn {
+      display: inline-block;
+    }
+    .saveBtn, .cancelBtn {
+      display: none;
+    }

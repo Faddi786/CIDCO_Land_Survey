@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plot Details Form</title>
+	 <link rel="stylesheet" href="../static/css/survey_form.css">
+</head>
+<body>
+
+<h1>Plot Details Form</h1>
+
+<form id="plotForm" enctype="multipart/form-data" method="POST">
+        <section id="section1" class="active">
+        <h2>Section 1 - Identity of Plot</h2>
+        <label for="user_name">Name of User:</label>
+        <input type="text" id="user_name" name="user_name">
+
+        <label for="node_name">Name of Node:</label>
+        <input type="text" id="node_name" name="node_name" autocomplete="off">
+
+        <label for="sector_no">Sector No:</label>
+        <input type="text" id="sector_no" name="sector_no" autocomplete="off">
+
+        <label for="block_name">Block Name:</label>
+        <input type="text" id="block_name" name="block_name" autocomplete="off">
+
+        <label for="plot_name">Plot Name:</label>
+        <input type="text" id="plot_name" name="plot_name" autocomplete="off">
+
+        <button type="button" onclick="validateAndNext(1)">Next Section</button>
+    </section>
+
+    
+    <section id="section2">
+        <h2>Section 2 - Details of Plot & Owners</h2>
+        <label for="allotment_date">Date of Allotment:</label>
+        <input type="date" id="allotment_date" name="allotment_date"  >
+
+        <label for="original_allottee">Name of Original Allottee:</label>
+        <input type="text" id="original_allottee" name="original_allottee"  >
+
+        <label for="area">Area (sqm):</label>
+        <input type="number" id="area" name="area"  >
+
+        <label for="use_of_plot">Use of Plot:</label>
+        <select id="use_of_plot" name="use_of_plot"  >
+            <option value="">Select Use</option>
+            <option value="Residential">Residential</option>
+            <option value="Commercial">Commercial</option>
+        </select>
+
+        <label for="rate">Rate (sqm):</label>
+        <input type="number" id="rate" name="rate"  >
+		      <button type="button" class="prev-btn" onclick="prevSection(2)">Back</button>
+        <button type="button" onclick="validateAndNext(2)">Next Section</button>
+    </section>
+
+    <section id="section3">
+        <h2>Section 3 - Transfer Details in Chronological Order</h2>
+        <div id="transferDetails">
+            <!-- Owner details added dynamically -->
+        </div>
+        <button type="button" id="addOwner">Add Owner</button>
+
+        <h2>Photos & Remarks</h2>
+        <label for="front_photo">Front Side Photo:</label>
+        <input type="file" id="front_photo" name="front_photo" accept="image/*"  >
+
+        <label for="left_photo">Left Side Photo:</label>
+        <input type="file" id="left_photo" name="left_photo" accept="image/*"  >
+
+        <label for="back_photo">Back Side Photo:</label>
+        <input type="file" id="back_photo" name="back_photo" accept="image/*"  >
+
+        <label for="right_photo">Right Side Photo:</label>
+        <input type="file" id="right_photo" name="right_photo" accept="image/*"  >
+
+        <label for="plot_sketch">Plot Sketch Photo:</label>
+        <input type="file" id="plot_sketch" name="plot_sketch" accept="image/*"  >
+
+        <label for="remarks">Remarks:</label>
+        <textarea id="remarks" name="remarks"  ></textarea>
+		 <button type="button" class="prev-btn" onclick="prevSection(3)">Back</button>
+
+        <button type="submit">Final Submit</button>
+    </section>
+</form>
+<script src = "../static/js/survey_form.js"></script>
+</body>
+</html>
