@@ -153,8 +153,31 @@ function cancelRow(button) {
     row.querySelector('.editBtn').style.display = 'inline-block';
 }
 
+
+
 // Function to delete a row
 function deleteRow(button) {
-    var row = button.parentNode.parentNode;
-    row.parentNode.removeChild(row);
+  // Get the row that contains the button
+  var row = button.parentNode.parentNode;
+  
+  // Get the UID from the data attribute of the node name (assuming it's in a span with class 'data')
+  var uid_to_delete = row.querySelector('.data').getAttribute('data-uid');
+  
+  // Send a POST request with the UID to the backend
+  fetch('/delete_values', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 'uid': uid_to_delete })
+  })
+  .then(response => response.json())
+  .then(data => {
+      console.log("i am here ",uid_to_delete);  // You can log or display the server's response
+      
+      // Remove the row from the table after deletion
+      row.parentNode.removeChild(row);
+  })
+  .catch(error => console.error('Error:', error));
 }
+
