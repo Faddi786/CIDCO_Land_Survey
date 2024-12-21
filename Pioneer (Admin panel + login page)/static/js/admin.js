@@ -11,7 +11,7 @@ window.onload = function() {
         const blockNames = data.Block_Name;
         const plotNos = data.Plot_No;
         const uids = data.dropdownvalues_uid;
-
+ 
         nodeNames.forEach((nodeName, index) => {
           const row = nodeTable.insertRow();
   

@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const plotInput = document.getElementById("plot_name");
  
     // Store the autocomplete data for validation
+
     let autocompleteData = {
         Node_Name: [],
         Sector: [],
@@ -25,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Fetch initial data
     fetchDropdownData();
 
-    // Autocomplete function
+    // Autocomplete function 
     function autocomplete(inp, data, nextField) {
         let currentFocus;
 
@@ -131,24 +132,40 @@ function submitFormData() {
     console.log("Form data before processing:");
     console.log([...formData.entries()]); // Log form data before adding defaults
 
-    // Ensure all required fields exist (t2 to t12 owner_name and transfer_date)
-    for (let i = 2; i <= 12; i++) {
-        const ownerNameKey = `t${i}owner_name`;
-        const transferDateKey = `t${i}transfer_date`;
 
-        // If the field doesn't exist in formData, set a default value "-"
-        if (!formData.has(ownerNameKey)) {
-            formData.set(ownerNameKey, '-');
-        }
-        if (!formData.has(transferDateKey)) {
-            formData.set(transferDateKey, '-');
-        }
+
+// {}for owner
+
+    // Process the Owner table data
+    const ownerRows = document.querySelectorAll("#transferDetails table tr");
+    let owners = [];
+
+    // Skip the header row, process only the data rows
+    for (let i = 1; i < ownerRows.length; i++) {
+        const row = ownerRows[i];
+        const ownerName = row.querySelector(`#t${i}owner_name`)?.value || '-';
+        const transferDate = row.querySelector(`#t${i}transfer_date`)?.value || '-';
+
+        // Format as name-date
+        const ownerString = `${ownerName}|${transferDate}`;
+        owners.push(ownerString);
     }
+
+    console.log('Owner Details:', owners);
+
+    // Convert the array to a comma-separated string or set a default "-"
+    const ownerString = owners.length > 0 ? owners.join(", ") : "-";
+    console.log('Formatted Owner String:', ownerString);
+
+
+
+// {}for owner
+
+
 
     // Process the Area table data
     const rows = document.querySelectorAll("#areaDetails table tr");
     let area = [];
-    // let areaPart2 = [];
 
     // Skip the header row, process only the data rows
     for (let i = 1; i < rows.length; i++) {
@@ -159,26 +176,24 @@ function submitFormData() {
 
         // Format as lxb=area
         const areaString = `${length}x${width}=${calculatedArea}`;
-        // if (i <= 5) {
-            area.push(areaString);
-        // } else {
-        //     areaPart2.push(areaString);
-        // }
+        area.push(areaString);
     }
     console.log('me yaha hu ');
     console.log(area);
     
-    
 
     // Convert arrays to comma-separated strings or set default "-"
     const areaString = area.length > 0 ? area.join(", ") : "-";
-    // const areaPart2String = areaPart2.length > 0 ? areaPart2.join(", ") : "-";
+
+
+
+
 
     // Add these values to FormData
     formData.set("area", areaString);
-    // formData.set("areapart2", areaPart2String);
+    formData.set("ownerNtransferDate", ownerString)// {} write the loginc of formData.set here just like above
 
-    console.log("Form data after processing area table:");
+    console.log("Form data after processing area & owners table:");
     console.log([...formData.entries()]); // Log form data after processing area table
 
     // Create a new XMLHttpRequest object
@@ -203,7 +218,7 @@ function submitFormData() {
 }
 
 
-
+// owner starts from here
 
 let ownerCount = 1; // Start from 2 since you want t2 fields to be created first.
 
@@ -338,7 +353,7 @@ function reinitializeAreaRowNumbers() {
         areaCount++;
     });
 }
-
+ 
 // Function to calculate area dynamically
 function calculateArea(count) {
     const length = document.getElementById(`length${count}`).value;

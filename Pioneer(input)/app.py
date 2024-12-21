@@ -1,3 +1,8 @@
+# image upload handling  ..... image is getting printed in the browser now make it store in such a way that it takes ...
+# images and store it in images folder and the name of the file along with the extension should be store in database 
+
+
+
 from flask import Flask, render_template, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -33,30 +38,14 @@ class plot_details(db.Model):
     area = db.Column(db.Float, nullable=True)
     use_of_plot = db.Column(db.String(100), nullable=True)
     rate = db.Column(db.Float, nullable=True)
-    t2owner_name = db.Column(db.String(200), nullable=True)
-    t2transfer_date = db.Column(db.Date, nullable=True)
-    t3owner_name = db.Column(db.String(200), nullable=True)
-    t3transfer_date = db.Column(db.Date, nullable=True)
-    t4owner_name = db.Column(db.String(200), nullable=True)
-    t4transfer_date = db.Column(db.Date, nullable=True)
-    t5owner_name = db.Column(db.String(200), nullable=True)
-    t5transfer_date = db.Column(db.Date, nullable=True)
-    t6owner_name = db.Column(db.String(200), nullable=True)
-    t6transfer_date = db.Column(db.Date, nullable=True)
-    t7owner_name = db.Column(db.String(200), nullable=True)
-    t7transfer_date = db.Column(db.Date, nullable=True)
-    t8owner_name = db.Column(db.String(200), nullable=True)
-    t8transfer_date = db.Column(db.Date, nullable=True)
-    t9owner_name = db.Column(db.String(200), nullable=True)
-    t9transfer_date = db.Column(db.Date, nullable=True)
-    t10owner_name = db.Column(db.String(200), nullable=True)
-    t10transfer_date = db.Column(db.Date, nullable=True)
-    t11owner_name = db.Column(db.String(200), nullable=True)
-    t11transfer_date = db.Column(db.Date, nullable=True)
-    t12owner_name = db.Column(db.String(200), nullable=True)
-    t12transfer_date = db.Column(db.Date, nullable=True)
+    ownerNtransferDate = db.Column(db.String(10000), nullable=True)
     remarks = db.Column(db.Text, nullable=True)
     entry_date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    front_photo =  db.Column(db.LargeBinary, nullable=True)
+    left_photo =  db.Column(db.LargeBinary, nullable=True)
+    back_photo =  db.Column(db.LargeBinary, nullable=True)
+    right_photo =  db.Column(db.LargeBinary, nullable=True)
+    plot_sketch =  db.Column(db.LargeBinary, nullable=True)
 
     def __repr__(self):
         return f"<Plot {self.plotdetails_uid}>"
@@ -83,29 +72,25 @@ def submit_form_data():
             sector_no = request.form.get('sector_no')
             block_name = request.form.get('block_name')
             plot_name = request.form.get('plot_name')
-            allotment_date = "2024-11-20"
+            allotment_date = request.form.get('allotment_date')
             original_allottee = request.form.get('original_allottee')
-            area = 9.5  # Placeholder; ensure this matches your database schema
+            area = request.form.get('area')  # Placeholder; ensure this matches your database schema
             use_of_plot = request.form.get('use_of_plot')
-            rate = 9.5  # Placeholder; ensure this matches your database schema
-
-            # Extract transfer details (log every step for clarity)
-
-
-            # Add similar logging for other transfer details...
-            t2owner_name = request.form.get('t2owner_name')
-            t2transfer_date = "2024-11-20"
-            # ...
+            rate = request.form.get('rate')    # Placeholder; ensure this matches your database schema
+            ownerNtransferDate = request.form.get('ownerNtransferDate') 
             remarks = request.form.get('remarks')
+            front_photo = request.form.get('front_photo')
+            left_photo = request.form.get('left_photo')
+            back_photo = request.form.get('back_photo')
+            right_photo = request.form.get('right_photo')
+            plot_sketch = request.form.get('plot_sketch')
 
-            # Log extracted data
-            print("Extracted data:")
-            print(f"user_name: {user_name}, node_name: {node_name}, sector_no: {sector_no}")
-            print(f"block_name: {block_name}, plot_name: {plot_name}, allotment_date: {allotment_date}")
-            print(f"original_allottee: {original_allottee}, area: {area}, use_of_plot: {use_of_plot}")
-            print(f"rate: {rate}, t2owner_name: {t2owner_name}, t2transfer_date: {t2transfer_date}")
-            print(f"remarks: {remarks}")
+            # Log extracted data 
+            print(front_photo,left_photo,back_photo,right_photo,plot_sketch)
+            print(f"rate: {rate}, ownerNtransferDate: {ownerNtransferDate}")
 
+
+            # for photos {}
 
 
             # Create a new plot_details record
@@ -113,9 +98,13 @@ def submit_form_data():
                 user_name=user_name, node_name=node_name, sector_no=sector_no, block_name=block_name,
                 plot_name=plot_name, allotment_date=allotment_date, original_allottee=original_allottee,
                 area=area, use_of_plot=use_of_plot, rate=rate,
-                t2owner_name=t2owner_name, t2transfer_date=t2transfer_date,
-                # Add all other transfer details...
-                remarks=remarks
+                ownerNtransferDate=ownerNtransferDate,
+                remarks=remarks,
+                front_photo= front_photo,
+                left_photo= left_photo,
+                back_photo= back_photo,
+                right_photo= right_photo,
+                plot_sketch= plot_sketch,
             )
 
 

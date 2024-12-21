@@ -181,7 +181,7 @@ def phone_no_validation():
         }
         for user in userdetails
     ]
-
+ 
     # Print the data before sending the response for debugging
     print("Data being sent as JSON response:")
     print(users_data)

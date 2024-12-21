@@ -1,48 +1,106 @@
+/* General Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 0;
+}
 
-    body {
-        font-family: Arial, sans-serif;
-        margin: 20px; 
-    }
-    form {
-        width: 80%;
-        margin: auto;
-    }
-    section {
-        display: none;
-        margin-bottom: 20px;
-        padding: 15px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-    section.active {
-        display: block;
-    }
-    label {
-        display: block;
-        margin: 10px 0 5px;
-    }
-    input, select, textarea {
-        width: 100%;
-        padding: 8px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box; /* Prevents overflow */
-    }
-    button {
-        padding: 10px 20px;
-        background-color: #28a745;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    button:hover {
-        background-color: #218838;
-    }
-    section {
-            display: none;
-        }
-    section.active {
-            display: block;
-        }
+/* Form Styling */
+form {
+    width: 80%;
+    margin: auto;
+}
+
+/* Section Styling */
+section {
+    display: none;
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+section.active {
+    display: block;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table td {
+    padding: 10px;
+}
+
+.form-table {
+    margin-bottom: 20px;
+}
+
+.form-table td {
+    vertical-align: top;
+}
+
+.form-table input, 
+.form-table select, 
+.form-table textarea {
+    width: 90%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Prevents overflow */
+}
+
+/* Input Styling */
+input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Button Styling */
+button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+/* Photo Section */
+.photo-section {
+    display: flex;
+    justify-content: space-between;
+}
+
+.photo-section .photo-container {
+    flex: 0 0 48%;
+}
+
+.photo-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.photo-container input {
+    width: 100%;
+}
+
+/* Textarea Styling */
+#remarks {
+    width: 95%;
+    height: 100px;
+    margin-top: 20px;
+}
