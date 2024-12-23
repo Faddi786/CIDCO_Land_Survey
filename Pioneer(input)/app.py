@@ -6,22 +6,39 @@
 from flask import Flask, render_template, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from werkzeug.utils import secure_filename
 import os
 
 app = Flask(__name__)
-
 # Update the database URI to MySQL
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Akhatri%402023@localhost/plot_details'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable track modifications to save memory
 app.config['UPLOAD_FOLDER'] = './uploads'  # Folder to save uploaded files
-
 db = SQLAlchemy(app)
+
+
+# {}
+# Configure upload folder and allowed extensions
+UPLOAD_FOLDER = 'images'  # Folder to store images
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif','jfif','avif'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Ensure the images folder exists
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+# Function to check if the file extension is allowed
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 
 
 @app.route('/')
 def index():
     return render_template('Survey_form.html')
+
+
 
 
 
@@ -41,11 +58,11 @@ class plot_details(db.Model):
     ownerNtransferDate = db.Column(db.String(10000), nullable=True)
     remarks = db.Column(db.Text, nullable=True)
     entry_date_created = db.Column(db.DateTime, default=datetime.utcnow)
-    front_photo =  db.Column(db.LargeBinary, nullable=True)
-    left_photo =  db.Column(db.LargeBinary, nullable=True)
-    back_photo =  db.Column(db.LargeBinary, nullable=True)
-    right_photo =  db.Column(db.LargeBinary, nullable=True)
-    plot_sketch =  db.Column(db.LargeBinary, nullable=True)
+    front_photo =  db.Column(db.String(500), nullable=True)
+    left_photo =  db.Column(db.String(1000), nullable=True)
+    back_photo =  db.Column(db.String(1000), nullable=True)
+    right_photo =  db.Column(db.String(1000), nullable=True)
+    plot_sketch =  db.Column(db.String(500), nullable=True)
 
     def __repr__(self):
         return f"<Plot {self.plotdetails_uid}>"
@@ -53,19 +70,11 @@ class plot_details(db.Model):
 
 
 # Home route
+# Route to handle form submission
 @app.route('/submit_form_data', methods=['POST', 'GET'])
 def submit_form_data():
     if request.method == 'POST':
         try:
-            # Log: Start of form submission
-            print("Start processing form submission...")
-
-            # Debug: Print form data
-            print("This is the form data received:")
-            for key, value in request.form.items():
-                print(f"{key}: {value}")
-            print("Full form data as a dictionary:", request.form.to_dict())
-
             # Extract form data
             user_name = request.form.get('user_name')
             node_name = request.form.get('node_name')
@@ -74,63 +83,66 @@ def submit_form_data():
             plot_name = request.form.get('plot_name')
             allotment_date = request.form.get('allotment_date')
             original_allottee = request.form.get('original_allottee')
-            area = request.form.get('area')  # Placeholder; ensure this matches your database schema
+            area = request.form.get('area')
             use_of_plot = request.form.get('use_of_plot')
-            rate = request.form.get('rate')    # Placeholder; ensure this matches your database schema
-            ownerNtransferDate = request.form.get('ownerNtransferDate') 
+            rate = request.form.get('rate')
+            ownerNtransferDate = request.form.get('ownerNtransferDate')
             remarks = request.form.get('remarks')
-            front_photo = request.form.get('front_photo')
-            left_photo = request.form.get('left_photo')
-            back_photo = request.form.get('back_photo')
-            right_photo = request.form.get('right_photo')
-            plot_sketch = request.form.get('plot_sketch')
 
-            # Log extracted data 
-            print(front_photo,left_photo,back_photo,right_photo,plot_sketch)
-            print(f"rate: {rate}, ownerNtransferDate: {ownerNtransferDate}")
+            # Process uploaded files
+            front_photo = request.files.get('front_photo')
+            left_photo = request.files.get('left_photo')
+            back_photo = request.files.get('back_photo')
+            right_photo = request.files.get('right_photo')
+            plot_sketch = request.files.get('plot_sketch')
 
+            # Save each file if present and allowed
+            def save_file(file):
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    file.save(filepath)
+                    return filename
+                return None
 
-            # for photos {}
+            front_photo_filename = save_file(front_photo)
+            left_photo_filename = save_file(left_photo)
+            back_photo_filename = save_file(back_photo)
+            right_photo_filename = save_file(right_photo)
+            plot_sketch_filename = save_file(plot_sketch)
 
+            # print(front_photo_filename,left_photo_filename)
 
             # Create a new plot_details record
             new_plot = plot_details(
-                user_name=user_name, node_name=node_name, sector_no=sector_no, block_name=block_name,
-                plot_name=plot_name, allotment_date=allotment_date, original_allottee=original_allottee,
-                area=area, use_of_plot=use_of_plot, rate=rate,
+                user_name=user_name,
+                node_name=node_name,
+                sector_no=sector_no,
+                block_name=block_name,
+                plot_name=plot_name,
+                allotment_date=allotment_date,
+                original_allottee=original_allottee,
+                area=area,
+                use_of_plot=use_of_plot,
+                rate=rate,
                 ownerNtransferDate=ownerNtransferDate,
                 remarks=remarks,
-                front_photo= front_photo,
-                left_photo= left_photo,
-                back_photo= back_photo,
-                right_photo= right_photo,
-                plot_sketch= plot_sketch,
+                front_photo=front_photo_filename,
+                left_photo=left_photo_filename,
+                back_photo=back_photo_filename,
+                right_photo=right_photo_filename,
+                plot_sketch=plot_sketch_filename
             )
 
-
-            # Debug: Verify the object before adding it to the session
-            print("New plot_details object created:", new_plot)
-
-            # Add the record to the database
+            # Save to the database
             db.session.add(new_plot)
-            print("Added new_plot to the session.")
-
-            # Commit to the database
             db.session.commit()
-            print("Database commit successful.")
 
             return redirect('/')
         except Exception as e:
-            # Log the exact error message for debugging
-            print("Error occurred during form submission:")
-            print(str(e))
             return f"There was an issue submitting the form: {str(e)}"
     else:
-        # Log: GET request handling
-        print("Rendering the index.html template.")
         return render_template('index.html')
-
-
 
 
 
@@ -176,8 +188,8 @@ def get_dropdown_values():
         'Plot_No': list(set(item.plot_no for item in dropdown_data if item.plot_no))
     }
 
-    print("Filtered data being sent as JSON response:")
-    print(data)
+    # print("Filtered data being sent as JSON response:")
+    # print(data)
 
     return jsonify(data)
 

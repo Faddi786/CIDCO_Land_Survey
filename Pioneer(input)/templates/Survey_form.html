@@ -16,15 +16,15 @@
         <table class="form-table" border="1">
             <tr>
                 <td><label for="node_name">Name of Node:</label></td>
-                <td><input type="text" id="node_name" name="node_name" placeholder="Start typing Node Name..." /></td>
+                <td><input type="text" id="node_name" name="node_name" placeholder="Start typing Node Name..." required  /></td>
                 <td><label for="sector_no">Sector No:</label></td>
-                <td><input type="text" id="sector_no" name="sector_no" placeholder="Select Sector..." /></td>
+                <td><input type="text" id="sector_no" name="sector_no" placeholder="Select Sector..." required  /></td>
             </tr>
             <tr>
                 <td><label for="block_name">Block Name:</label></td>
-                <td><input type="text" id="block_name" name="block_name" placeholder="Select Block..." /></td>
+                <td><input type="text" id="block_name" name="block_name" placeholder="Select Block..." required  /></td>
                 <td><label for="plot_name">Plot Name:</label></td>
-                <td><input type="text" id="plot_name" name="plot_name" placeholder="Select Plot..." /></td>
+                <td><input type="text" id="plot_name" name="plot_name" placeholder="Select Plot..." required  /></td>
             </tr>
         </table>
 
@@ -32,22 +32,22 @@
         <table class="form-table" border="1">
             <tr>
                 <td><label for="allotment_date">Date of Allotment:</label></td>
-                <td><input type="date" id="allotment_date" name="allotment_date" /></td>
+                <td><input type="date" id="allotment_date" name="allotment_date" required  /></td>
                 <td><label for="original_allottee">Name of Original Allottee:</label></td>
-                <td><input type="text" id="original_allottee" name="original_allottee" /></td>
+                <td><input type="text" id="original_allottee" name="original_allottee" required /></td>
             </tr>
             <tr>
 
                 <td><label for="use_of_plot">Use of Plot:</label></td>
                 <td>
-                    <select id="use_of_plot" name="use_of_plot">
+                    <select id="use_of_plot" name="use_of_plot" required >
                         <option value="">Select Use</option>
                         <option value="Residential">Residential</option>
                         <option value="Commercial">Commercial</option>
                     </select>
                 </td>
                 <td><label for="rate">Rate (sqm):</label></td>
-                <td><input type="number" id="rate" name="rate" /></td>
+                <td><input type="number" id="rate" name="rate" required /></td>
                 
             </tr>
 
@@ -71,25 +71,25 @@
         <div class="photo-section">
             <div class="photo-container">
                 <label for="front_photo">Front Side Photo:</label>
-                <input type="file" id="front_photo" name="front_photo" accept="image/*" />
+                <input type="file" id="front_photo" name="front_photo" accept="image/*" required  />
 
                 <label for="left_photo">Left Side Photo:</label>
-                <input type="file" id="left_photo" name="left_photo" accept="image/*" />
+                <input type="file" id="left_photo" name="left_photo" accept="image/*" required  />
             </div>
             <div class="photo-container">
                 <label for="back_photo">Back Side Photo:</label>
-                <input type="file" id="back_photo" name="back_photo" accept="image/*" />
+                <input type="file" id="back_photo" name="back_photo" accept="image/*" required />
 
                 <label for="right_photo">Right Side Photo:</label>
-                <input type="file" id="right_photo" name="right_photo" accept="image/*" />
+                <input type="file" id="right_photo" name="right_photo" accept="image/*" required  />
             </div>
         </div>
 
         <label for="plot_sketch">Plot Sketch Photo:</label>
-        <input type="file" id="plot_sketch" name="plot_sketch" accept="image/*" />
+        <input type="file" id="plot_sketch" name="plot_sketch" accept="image/*" required />
 
         <label for="remarks">Remarks:</label>
-        <textarea id="remarks" name="remarks"></textarea>
+        <textarea id="remarks" name="remarks" required ></textarea>
 
         <button type="submit">Final Submit</button>
 
@@ -97,5 +97,3 @@
     <script src="../static/js/survey_form.js"></script>
 </body>
 </html>
-
-

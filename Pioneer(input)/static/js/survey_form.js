@@ -220,7 +220,7 @@ function submitFormData() {
 
 // owner starts from here
 
-let ownerCount = 1; // Start from 2 since you want t2 fields to be created first.
+let ownerCount = 2; // Start from 2 since you want t2 fields to be created first.
 
 // Create the table structure initially
 const transferDetails = document.getElementById("transferDetails");
@@ -239,6 +239,15 @@ headerRow.innerHTML = `
 table.appendChild(headerRow);
 transferDetails.appendChild(table);
 
+const firstOwner = document.createElement("tr");
+
+firstOwner.innerHTML = `
+    <td>owner 1</td>
+    <td><input type="text" id="t1owner_name" name="t1owner_name" placeholder="Enter Name" required></td>
+    <td><input type="date" id="t1transfer_date" name="t1transfer_date" required></td>
+    <td></td> <!-- No action button for the first row -->
+`;
+table.appendChild(firstOwner)
 // Event listener to add a new owner row
 document.getElementById("addOwner").addEventListener("click", () => {
     if (ownerCount <= 12) {
@@ -282,9 +291,11 @@ function reinitializeOwnerRowNumbers() {
     });
 }
 
-// Area Table Logic
 
-let areaCount = 1; // Start with Area 1
+
+
+// Area Table Logic
+let areaCount = 2; // Start with Area 1
 const maxAreas = 11; // Maximum allowed areas (as per your prompt)
 
 // Create the table structure initially
@@ -305,6 +316,19 @@ areaHeaderRow.innerHTML = `
 areaTable.appendChild(areaHeaderRow);
 areaDetails.appendChild(areaTable);
 
+// Create the first row (always visible and required)
+const firstRow = document.createElement("tr");
+
+firstRow.innerHTML = `
+    <td>Area 1</td>
+    <td><input type="number" id="length1" placeholder="Enter Length" oninput="calculateArea(1)" required></td>
+    <td><input type="number" id="width1" placeholder="Enter Width" oninput="calculateArea(1)" required></td>
+    <td id="calculatedArea1">0</td>
+    <td></td> <!-- No action button for the first row -->
+`;
+
+areaTable.appendChild(firstRow); // Append the first row to the table
+
 // Event listener for adding new rows
 document.getElementById("addArea").addEventListener("click", () => {
     if (areaCount >= maxAreas) {
@@ -318,11 +342,11 @@ document.getElementById("addArea").addEventListener("click", () => {
         <td>Area ${areaCount} </td>
         <td>
             <input type="number" id="length${areaCount}" placeholder="Enter Length" 
-                   oninput="calculateArea(${areaCount})">
+                   oninput="calculateArea(${areaCount})" required>
         </td>
         <td>
             <input type="number" id="width${areaCount}" placeholder="Enter Width" 
-                   oninput="calculateArea(${areaCount})">
+                   oninput="calculateArea(${areaCount})" required>
         </td>
         <td id="calculatedArea${areaCount}">0</td>
         <td>
@@ -346,14 +370,14 @@ document.getElementById("addArea").addEventListener("click", () => {
 // Function to reinitialize the area row numbers
 function reinitializeAreaRowNumbers() {
     const rows = areaTable.querySelectorAll("tr:nth-child(n+2)"); // Skip the header row
-    areaCount = 1; // Reset area count for reinitialization
+    areaCount = 2; // Start from 2 for subsequent rows
 
     rows.forEach((row, index) => {
         row.querySelector("td:first-child").textContent = `Area ${areaCount}`;
         areaCount++;
     });
 }
- 
+
 // Function to calculate area dynamically
 function calculateArea(count) {
     const length = document.getElementById(`length${count}`).value;
