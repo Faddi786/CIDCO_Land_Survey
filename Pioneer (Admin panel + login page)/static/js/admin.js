@@ -26,7 +26,7 @@ window.onload = function() {
               <input type="text" class="edit-input" value="${nodeName}" style="display:none;">
             `;
 
-  
+
           // Insert the sector
           const sectorCell = row.insertCell(2);
           sectorCell.innerHTML = `<span class="data">${sectors[index]}</span><input type="text" class="edit-input" value="${sectors[index]}" style="display:none;">`;
@@ -176,6 +176,7 @@ function deleteRow(button) {
       console.log("i am here ",uid_to_delete);  // You can log or display the server's response
       
       // Remove the row from the table after deletion
+      confirm('are you sure you want to delete the node ?')
       row.parentNode.removeChild(row);
   })
   .catch(error => console.error('Error:', error));

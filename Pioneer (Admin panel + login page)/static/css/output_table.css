@@ -1,0 +1,108 @@
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        table th, table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        table th {
+            background-color: #007BFF;
+            color: white;
+        }
+        table td button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        table td button:hover {
+            background-color: #218838;
+        }
+        input {
+            margin: 10px 0;
+            padding: 8px;
+            width: 200px;
+        }
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+                /* Add some basic styles */
+                #buttonContainer {
+                    margin: 20px 0;
+                }
+        
+                .filter-button {
+                    padding: 10px 15px;
+                    margin-right: 10px;
+                    border: none;
+                    background-color: #f0f0f0;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                }
+        
+                .filter-button.active {
+                    background-color: #007bff;
+                    color: white;
+                }
+        
+                .filter-button:hover {
+                    background-color: #ddd;
+                }
+        
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 20px;
+                }
+        
+                th, td {
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                    text-align: left;
+                }
+        
+                th {
+                    background-color: #f4f4f4;
+                }
+/* Base styles for filter buttons */
+.filter-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    margin-right: 10px;
+}
+
+/* Hover effect */
+.filter-button:hover {
+    background-color: #e2e6ea;
+    color: #000;
+}
+
+/* Active button styling */
+.filter-button.active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}

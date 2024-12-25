@@ -1,0 +1,128 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plot Details View</title>
+    <link rel="stylesheet" href="../static/css/survey_output_form.css">
+</head>
+<body>
+    <b>sample sample sample sample sample sample sample sample sample sample sample sample sample sample sample sample sample sample sample sample sample sample sample </b>
+ <form action="/survey_output_form" enctype="multipart/form-data" method="post"> <!-- {} make sure action me kya dal na hai-->
+    <div class="container">
+        <!-- Survey Details Section -->
+        <section>
+            <h2>Edit Survey Details</h2>
+            <table>
+                <tr>
+                    <td><strong>Form ID:</strong></td>
+                    <td><input id="surveyformdata_uid"></input></td>
+                    <td><strong>Surveyor Name:</strong></td>
+                    <td><input id="user_name"></input></td>
+                </tr>
+                <tr>
+                    <td><strong>Date of Survey:</strong></td>
+                    <td><input type="datetime-local" id="entry_date_created"></input></td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Section 1 - Identity of Plot -->
+        <section>
+            <h2>Section 1 - Identity of Plot</h2>
+            <table>
+                <tr>
+                    <td><strong>Name of Node:</strong></td>
+                    <td><input id="node_name"></input></td>
+                    <td><strong>Sector No:</strong></td>
+                    <td><input id="sector_no"></input></td>
+                </tr>
+                <tr>
+                    <td><strong>Block Name:</strong></td>
+                    <td><input id="block_name"></input></td>
+                    <td><strong>Plot Name:</strong></td>
+                    <td><input id="plot_name"></input></td>
+                </tr>
+                <tr>
+                    <td><strong>surveyor_remarks:</strong></td>
+                    <td><input id="surveyor_remarks"></input></td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Section 2 -->
+        <section>
+            <h2>Section 2 - Details of Plot & Owners</h2>
+            <table>
+                <tr>
+                    <td><strong>Date of Allotment:</strong></td>
+                    <td><input type="date" id="allotment_date"></input></td>
+                    <td><strong>Name of Original Allottee:</strong></td>
+                    <td><input id="original_allottee"></input></td>
+                </tr>
+                <tr>
+                    <td><strong>Area (sqm):</strong></td>
+                    <td><input id="area">No data</input></td>
+                    <td><strong>Use of Plot:</strong></td>
+                    <td><input id="use_of_plot"></input></td>
+                </tr>
+                <tr>
+                    <td><strong>Rate (sqm):</strong></td>
+                    <td><input id="rate"></input></td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Section 3 -->
+        <section id="section3" style="display:none;">
+            <h2>Section 3 - Transfer Details in Chronological Order</h2>
+            <div id="transferDetails">
+                <!-- Owner details added dynamically -->
+            </div>
+        </section>
+          <!-- Section 4 -->
+        <section>
+            <h2>Photos</h2>
+            <div class="photos-grid">
+                <div class="photo-item">
+                    
+                    <label for="front_photo">Front Side Photo:</label>
+                    <!-- <span style="position: relative; top:4px;right: -80px;">he</span> -->
+                    <img id="front_photo" alt="No photo" onclick="openModal(this)">
+                </div>
+                <div class="photo-item">
+                    <label for="left_photo">Left Side Photo:</label>
+                    <img id="left_photo"  alt="No photo" onclick="openModal(this)">
+                </div>
+                <div class="photo-item">
+                    <label for="back_photo">Back Side Photo:</label>
+                    <img id="back_photo" alt="No photo" onclick="openModal(this)">
+                </div>
+                <div class="photo-item">
+                    <label for="right_photo">Right Side Photo:</label>
+                    <img id="right_photo"  alt="No photo" onclick="openModal(this)">
+                </div>
+                <div class="photo-item">
+                    <label for="plot_sketch">Sketch Photo:</label>
+                    <img id="plot_sketch"  alt="No photo" onclick="openModal(this)">
+                </div>
+            </div>
+        </section>
+    </div>
+    <button style="position: fixed; bottom: 20px; right: 20px;" id="acceptPushButton">SAVE</button>
+    <a href="/survey_output_form"><button style="position: fixed; bottom: 80px; right: 20px;" id="editForm">Cancel</button></a>
+
+    <!-- Modal for image view -->
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="close">&times;</span>
+        <img id="modalImg" class="modal-content" alt="Full View">
+    </div>
+</form>
+    <script src="../static/js/editByQC.js"></script>
+
+</body>
+</html>
+

@@ -11,27 +11,41 @@
 <h1>Plot Details Form</h1>
 
 <form id="plotForm" enctype="multipart/form-data" method="POST">
-        <section id="section1" class="active">
+    <section id="section1" class="active">
         <h2>Section 1 - Identity of Plot</h2>
         <label for="user_name">Name of User:</label>
-        <input type="text" id="user_name" name="user_name">
+        <input type="text" id="user_name" name="user_name"  >
 
         <label for="node_name">Name of Node:</label>
-        <input type="text" id="node_name" name="node_name" autocomplete="off">
+        <select id="node_name" name="node_name"  >
+            <option value="">Select Node</option>
+            <option value="Node1">Node1</option>
+            <option value="Node2">Node2</option>
+        </select>
 
         <label for="sector_no">Sector No:</label>
-        <input type="text" id="sector_no" name="sector_no" autocomplete="off">
+        <select id="sector_no" name="sector_no"  >
+            <option value="">Select Sector</option>
+            <option value="Sector1">Sector1</option>
+            <option value="Sector2">Sector2</option>
+        </select>
 
         <label for="block_name">Block Name:</label>
-        <input type="text" id="block_name" name="block_name" autocomplete="off">
+        <select id="block_name" name="block_name"  >
+            <option value="">Select Block</option>
+            <option value="BlockA">BlockA</option>
+            <option value="BlockB">BlockB</option>
+        </select>
 
         <label for="plot_name">Plot Name:</label>
-        <input type="text" id="plot_name" name="plot_name" autocomplete="off">
-
+        <select id="plot_name" name="plot_name"  >
+            <option value="">Select Plot</option>
+            <option value="PlotX">PlotX</option>
+            <option value="PlotY">PlotY</option>
+        </select>
         <button type="button" onclick="validateAndNext(1)">Next Section</button>
     </section>
 
-    
     <section id="section2">
         <h2>Section 2 - Details of Plot & Owners</h2>
         <label for="allotment_date">Date of Allotment:</label>
@@ -79,8 +93,8 @@
         <label for="plot_sketch">Plot Sketch Photo:</label>
         <input type="file" id="plot_sketch" name="plot_sketch" accept="image/*"  >
 
-        <label for="remarks">Remarks:</label>
-        <textarea id="remarks" name="remarks"  ></textarea>
+        <label for="surveyor_remarks">surveyor_remarks:</label>
+        <textarea id="surveyor_remarks" name="surveyor_remarks"  ></textarea>
 		 <button type="button" class="prev-btn" onclick="prevSection(3)">Back</button>
 
         <button type="submit">Final Submit</button>

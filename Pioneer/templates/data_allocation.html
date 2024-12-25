@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table with Editable Rows</title>
+    <link rel="stylesheet" href="../static/css/data_allocation.css">
+</head>
+<body>
+    <!-- Filter input -->
+    <input type="text" id="usernameFilter" onkeyup="filterTable()" placeholder="Filter by username">
+
+    <!-- Table -->
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Sector</th>
+                <th>Phone</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be dynamically populated here -->
+        </tbody>
+    </table>
+    <script src = "../static/js/data_allocation.js"></script>
+</body>
+</html>

@@ -35,10 +35,16 @@ function login() {
             // If the phone number is valid and found in the database, check the role
             if (user.role === 0) {
                 // If role is 0, redirect to the user page
-                window.location.href = "/user";  // Redirect to user.html
+                window.location.href = "/survey_user";  // Redirect to user.html
             } else if (user.role === 1) {
                 // If role is 1, redirect to the manager page
-                window.location.href = "/manager";  // Redirect to manager.html
+                window.location.href = "/qc_user";  // Redirect to manager.html
+            } else if (user.role === 2) {
+                // If role is 1, redirect to the manager page
+                window.location.href = "/validator_user";  // Redirect to manager.html
+            } else if (user.role === 3) {
+                // If role is 1, redirect to the manager page
+                window.location.href = "/admin_user";  // Redirect to manager.html
             } else {
                 alert("User role is invalid.");
             }

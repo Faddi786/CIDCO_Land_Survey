@@ -1,49 +1,246 @@
-  <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-    }
-    form {
-        width: 80%;
-        margin: auto;
-    }
-    section {
-        display: none;
-        margin-bottom: 20px;
-        padding: 15px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-    section.active {
+/* General Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Form Styling */
+form {
+    width: 100%;
+    margin: auto;
+}
+
+/* Section Styling */
+section {
+    display: none;
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+section.active {
+    display: block;
+}
+
+/* Table Styling (for larger screens) */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table td {
+    padding: 10px;
+}
+
+.form-table {
+    margin-bottom: 20px;
+}
+
+.form-table td {
+    vertical-align: top;
+}
+
+.form-table input, 
+.form-table select, 
+.form-table textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Input Styling */
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Button Styling */
+button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+/* Photo Section */
+.photo-section {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.photo-section .photo-container {
+    flex: 0 0 48%;
+    margin-bottom: 10px;
+}
+
+.photo-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.photo-container input {
+    width: 100%;
+}
+
+/* Textarea Styling */
+#remarks {
+    width: 100%;
+    height: 150px;
+    margin-top: 20px;
+    padding: 12px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    /* Adjust form fields for smaller devices */
+    .form-table td {
         display: block;
-    }
-    label {
-        display: block;
-        margin: 10px 0 5px;
-    }
-    input, select, textarea {
         width: 100%;
         padding: 8px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box; /* Prevents overflow */
+        margin-bottom: 12px;
     }
+
+    .form-table {
+        display: block;
+    }
+
+    /* Remove the table format and stack input fields vertically */
+    .form-table label {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .form-table input, 
+    .form-table select, 
+    .form-table textarea {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+
+    /* Handle photo section for mobile */
+    .photo-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .photo-container {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    /* Adjust button size */
     button {
-        padding: 10px 20px;
-        background-color: #28a745;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
+        padding: 12px;
+        width: 100%;
+        margin-top: 20px;
     }
-    button:hover {
-        background-color: #218838;
+
+    /* Adjust textarea height */
+    #remarks {
+        height: 150px;
     }
-    section {
-            display: none;
-        }
-    section.active {
-            display: block;
-        }
-    </style>
+
+    /* Prevent horizontal scrolling */
+    body, form {
+        overflow-x: hidden;
+    }
+
+    /* Adjust input width and spacing */
+    input, select, textarea {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Styling to hide lines in smaller devices */
+    section:not(.active) {
+        display: none; /* Hides inactive sections */
+    }
+
+    /* Remove lines or borders in Section 1 and 2 */
+    .form-table td {
+        border: none; /* Removes borders around form elements */
+    }
+
+    /* Adjust margins for neat spacing */
+    .form-table label,
+    .form-table input,
+    .form-table select,
+    .form-table textarea {
+        margin-bottom: 15px; /* Adds space between fields */
+    }
+
+    /* Section-specific styling */
+    .photo-section .photo-container {
+        margin-bottom: 20px;
+    }
+
+    /* Add padding to improve form visibility on small screens */
+    form {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+/* Tablet/Medium Screen Responsiveness (approx 650px width) */
+@media (max-width: 900px) and (min-width: 650px) {
+    /* Adjust the input field sizes on medium screens */
+    input, select, textarea {
+        width: 90%;  /* Makes the inputs slightly smaller */
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    /* Slightly smaller padding for the form */
+    .form-table input, 
+    .form-table select, 
+    .form-table textarea {
+        padding: 10px;
+    }
+
+    /* Adjust photo section for better fit */
+    .photo-section {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .photo-container {
+        width: 48%;
+        margin-bottom: 10px;
+    }
+
+    /* Adjust button for medium screens */
+    button {
+        padding: 10px;
+    }
+}
+
+/* Desktop Responsiveness - Button size */
+@media (min-width: 769px) {
+    button {
+        padding: 8px 16px;  /* Smaller padding for desktop */
+        font-size: 14px;     /* Slightly smaller font size */
+        width: auto;         /* Allow button width to adjust to content */
+    }
+}

@@ -36,7 +36,7 @@ def allowed_file(filename):
 
 @app.route('/')
 def index():
-    return render_template('Survey_form.html')
+    return render_template('loginForm.html')
 
 
 

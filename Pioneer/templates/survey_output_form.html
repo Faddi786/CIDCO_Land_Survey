@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plot Details View</title>
+    <link rel="stylesheet" href="../static/css/survey_output_form.css">
+</head>
+<body>
+    <form action=""></form>
+    <div class="container">
+        <!-- Survey Details Section -->
+        <section>
+            <h2>Survey Details</h2>
+            <table>
+                <tr>
+                    <td><strong>Form ID:</strong></td>
+                    <td><span id="surveyformdata_uid">No data</span></td>
+                    <td><strong>Surveyor Name:</strong></td>
+                    <td><span id="user_name">No data</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Date of Survey:</strong></td>
+                    <td><span id="entry_date_created">No data</span></td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Section 1 - Identity of Plot -->
+        <section>
+            <h2>Section 1 - Identity of Plot</h2>
+            <table>
+                <tr>
+                    <td><strong>Name of Node:</strong></td>
+                    <td><span id="node_name">No data</span></td>
+                    <td><strong>Sector No:</strong></td>
+                    <td><span id="sector_no">No data</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Block Name:</strong></td>
+                    <td><span id="block_name">No data</span></td>
+                    <td><strong>Plot Name:</strong></td>
+                    <td><span id="plot_name">No data</span></td>
+                </tr>
+                <tr>
+                    <td><strong>surveyor_remarks:</strong></td>
+                    <td><span id="surveyor_remarks">No data</span></td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Section 2 -->
+        <section>
+            <h2>Section 2 - Details of Plot & Owners</h2>
+            <table>
+                <tr>
+                    <td><strong>Date of Allotment:</strong></td>
+                    <td><span id="allotment_date">No data</span></td>
+                    <td><strong>Name of Original Allottee:</strong></td>
+                    <td><span id="original_allottee">No data</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Area (sqm):</strong></td>
+                    <td><span id="area">No data</span></td>
+                    <td><strong>Use of Plot:</strong></td>
+                    <td><span id="use_of_plot">No data</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Rate (sqm):</strong></td>
+                    <td><span id="rate">No data</span></td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Section 3 -->
+        <section id="section3" style="display:none;">
+            <h2>Section 3 - Transfer Details in Chronological Order</h2>
+            <div id="transferDetails">
+                <!-- Owner details added dynamically -->
+            </div>
+        </section>
+          <!-- Section 4 -->
+        <section>
+            <h2>Photos</h2>
+            <div class="photos-grid">
+                <div class="photo-item">
+                    <label for="front_photo">Front Side Photo:</label>
+                    <img id="front_photo" alt="No photo" onclick="openModal(this)">
+                </div>
+                <div class="photo-item">
+                    <label for="left_photo">Left Side Photo:</label>
+                    <img id="left_photo"  alt="No photo" onclick="openModal(this)">
+                </div>
+                <div class="photo-item">
+                    <label for="back_photo">Back Side Photo:</label>
+                    <img id="back_photo" alt="No photo" onclick="openModal(this)">
+                </div>
+                <div class="photo-item">
+                    <label for="right_photo">Right Side Photo:</label>
+                    <img id="right_photo"  alt="No photo" onclick="openModal(this)">
+                </div>
+                <div class="photo-item">
+                    <label for="plot_sketch">Sketch Photo:</label>
+                    <img id="plot_sketch"  alt="No photo" onclick="openModal(this)">
+                </div>
+            </div>
+        </section>
+    </div>
+    <button style="position: fixed; bottom: 20px; right: 20px;" id="acceptPushButton">Accept and Push for Validation</button>
+    <a href="/editByQC"><button style="position: fixed; top: 20px; right: 20px;" id="editForm">Edit</button></a>
+
+    <!-- Modal for image view -->
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="close">&times;</span>
+        <img id="modalImg" class="modal-content" alt="Full View">
+    </div>
+
+    <script src="../static/js/survey_output_form.js"></script>
+
+</body>
+</html>
+

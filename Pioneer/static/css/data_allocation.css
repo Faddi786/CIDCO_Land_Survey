@@ -1,0 +1,30 @@
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+        .filter {
+            margin-bottom: 20px;
+        }
+        .editable {
+            background-color: #f0f0f0;
+        }
+        .hidden {
+            display: none;
+        }
+
+        td[contenteditable] {
+            border: 1px solid #ccc;
+            padding: 5px;
+        }
+        .hidden {
+            display: none;
+        }
