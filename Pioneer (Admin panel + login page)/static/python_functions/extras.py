@@ -1,3 +1,4 @@
+from flask import Flask, render_template, request, redirect, jsonify
 
 
 
@@ -10,6 +11,7 @@ class plot_details(db.Model):
     sector_no = db.Column(db.String(100), nullable=False)
     block_name = db.Column(db.String(100), nullable=False)
     plot_name = db.Column(db.String(100), nullable=False)
+    plot_status = db.Column(db.String(20),nullable = False)
     allotment_date = db.Column(db.Date, nullable=False)
     original_allottee = db.Column(db.String(200), nullable=False)
     area = db.Column(db.Float, nullable=False)
@@ -77,6 +79,7 @@ def submit_form_data():
         sector_no = request.form['sector_no']
         block_name = request.form['block_name']
         plot_name = request.form['plot_name']
+        plot_status = request.form['plot_status']
         allotment_date = request.form['allotment_date']
         original_allottee = request.form['original_allottee']
         area = "9.5"
@@ -177,7 +180,7 @@ def submit_form_data():
         new_plot = plot_details(
             user_name=user_name, node_name=node_name, sector_no=sector_no, block_name=block_name,
             plot_name=plot_name, allotment_date=allotment_date, original_allottee=original_allottee,
-            area=area, use_of_plot=use_of_plot, rate=rate,
+            area=area, use_of_plot=use_of_plot, rate=rate,plot_status=plot_status,
             t1owner_name=t1owner_name, t1transfer_date=t1transfer_date,
             t2owner_name=t2owner_name, t2transfer_date=t2transfer_date,
             t3owner_name=t3owner_name, t3transfer_date=t3transfer_date,

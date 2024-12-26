@@ -1,9 +1,20 @@
 from flask import Flask, render_template, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 import os
+from werkzeug.utils import secure_filename
+from multiprocessing import connection
+from flask_cors import CORS
 from static.python_functions import helper_functions
+
 app = Flask(__name__)
+
+
+
+
+app = Flask(__name__)
+CORS(app)
 
 # Update the database URI to MySQL
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Akhatri%402023@localhost/plot_details'
@@ -12,12 +23,6 @@ app.config['UPLOAD_FOLDER'] = './uploads'  # Folder to save uploaded files
 
 # Update the database URI to MySQL
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Akhatri%402023@localhost/plot_details_db'
-
-# Configure upload folder and allowed extensions
-UPLOAD_FOLDER = 'images'  # Folder to store images
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif','jfif','avif'}
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 db = SQLAlchemy(app)
 
 
@@ -50,11 +55,20 @@ def validator_user():
     return render_template('validator_user.html')
 
 
+@app.route('/validator_verify')
+def validator_verify():
+    return render_template('validator_form_accept_reject.html')
+
+
 # Route for the user page
 @app.route('/admin_user')
 def admin_user():
     return render_template('admin_user.html')
 
+
+@app.route('/admin_table')
+def admin_table():
+    return render_template('admin.html')
 
 
 # Route for the user page
@@ -129,61 +143,67 @@ class dropdown_values(db.Model):
 
 
 # Model for storing plot details
-class plot_details(db.Model):
-    plotdetails_uid = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.String(200), nullable=True)
-    node_name = db.Column(db.String(100), nullable=True)
-    sector_no = db.Column(db.String(100), nullable=True)
-    block_name = db.Column(db.String(100), nullable=True)
-    plot_name = db.Column(db.String(100), nullable=True)
-    allotment_date = db.Column(db.Date, nullable=True)
-    original_allottee = db.Column(db.String(200), nullable=True)
-    area = db.Column(db.Float, nullable=True)
-    use_of_plot = db.Column(db.String(100), nullable=True)
-    rate = db.Column(db.Float, nullable=True)
-    ownerNtransferDate = db.Column(db.String(10000), nullable=True)
-    remarks = db.Column(db.Text, nullable=True)
-    entry_date_created = db.Column(db.DateTime, default=datetime.utcnow)
-    front_photo =  db.Column(db.String(500), nullable=True)
-    left_photo =  db.Column(db.String(1000), nullable=True)
-    back_photo =  db.Column(db.String(1000), nullable=True)
-    right_photo =  db.Column(db.String(1000), nullable=True)
-    plot_sketch =  db.Column(db.String(500), nullable=True)
-
-    def __repr__(self):
-        return f"<Plot {self.plotdetails_uid}>"
-
-
-
-# Model for storing plot details
 class survey_form_data(db.Model):
-    surveyformdata_uid = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.String(200), nullable=False)
-    node_name = db.Column(db.String(100), nullable=False)
-    sector_no = db.Column(db.String(100), nullable=False)
-    block_name = db.Column(db.String(100), nullable=False)
-    plot_name = db.Column(db.String(100), nullable=False)
-    allotment_date = db.Column(db.Date, nullable=False)
-    original_allottee = db.Column(db.String(200), nullable=False)
-    area = db.Column(db.Float, nullable=False)
-    use_of_plot = db.Column(db.String(100), nullable=False)
-    rate = db.Column(db.Float, nullable=False)
-    ownerNtransferDate = db.Column(db.Text, nullable=True)
-
-    surveyor_remarks = db.Column(db.Text, nullable=True)
-    front_photo = db.Column(db.String(200), nullable=False)
-    left_photo = db.Column(db.String(200), nullable=False)
-    back_photo = db.Column(db.String(200), nullable=False)
-    right_photo = db.Column(db.String(200), nullable=False)
-    plot_sketch = db.Column(db.String(200), nullable=False)
-    entry_date_created = db.Column(db.DateTime, default=datetime.utcnow)
-    surveyform_status = db.Column(db.String(200), nullable=False)
-    is_qc_done = db.Column(db.String(200), nullable=False)
-    is_validation_done = db.Column(db.String(200), nullable=False)
-    validator_remarks = db.Column(db.String(200), nullable=False)
+    surveyformdata_uid = db.Column(db.Integer, primary_key=True)#
+    #plotdetails_uid=db.Column(db.Integer,primary_key=True)#this has been deleted frm the database instead of this we have above variable 
+    user_name = db.Column(db.String(200), nullable=True) #
+    node_name = db.Column(db.String(100), nullable=True)#
+    sector_no = db.Column(db.String(100), nullable=True)#
+    block_name = db.Column(db.String(100), nullable=True)#
+    plot_name = db.Column(db.String(100), nullable=True)#
+    allotment_date = db.Column(db.Date, nullable=True)#
+    plot_status = db.Column(db.String(20),nullable=True)
+    original_allottee = db.Column(db.String(200), nullable=True)#
+    area = db.Column(db.String(1000), nullable=True)#
+    use_of_plot = db.Column(db.String(100), nullable=True)#
+    rate = db.Column(db.Float, nullable=True)#
+    ownerNtransferDate = db.Column(db.String(10000), nullable=True)#
+    surveyor_remarks = db.Column(db.Text, nullable=True)#
+    entry_date_created = db.Column(db.DateTime, default=datetime.utcnow)#
+    front_photo =  db.Column(db.String(500), nullable=True)#
+    left_photo =  db.Column(db.String(1000), nullable=True)#
+    back_photo =  db.Column(db.String(1000), nullable=True)#
+    right_photo =  db.Column(db.String(1000), nullable=True)#
+    plot_sketch =  db.Column(db.String(500), nullable=True)#
+    surveyform_status = db.Column(db.Integer,default=0 , nullable=False)#
+    is_qc_done = db.Column(db.Integer,default=0 , nullable=False)#
+    is_validation_done = db.Column(db.Integer,default=0 , nullable=False)#
+    validator_remarks = db.Column(db.String(200), nullable=False)#
 
     def __repr__(self):
-        return f"<Plot {self.id}>"
+        return f"<Plot {self.surveyformdata_uid}>"
+
+
+# given below is somewhat incorrect 
+
+# # Model for storing plot details
+# class survey_form_data(db.Model):
+#     surveyformdata_uid = db.Column(db.Integer, primary_key=True)
+#     user_name = db.Column(db.String(200), nullable=False)
+#     node_name = db.Column(db.String(100), nullable=False)
+#     sector_no = db.Column(db.String(100), nullable=False)
+#     block_name = db.Column(db.String(100), nullable=False)
+#     plot_name = db.Column(db.String(100), nullable=False)
+#     allotment_date = db.Column(db.Date, nullable=False)
+#     original_allottee = db.Column(db.String(200), nullable=False)
+#     area = db.Column(db.Float, nullable=False)
+#     use_of_plot = db.Column(db.String(100), nullable=False)
+#     rate = db.Column(db.Float, nullable=False)
+#     ownerNtransferDate = db.Column(db.Text, nullable=True)
+#     surveyor_remarks = db.Column(db.Text, nullable=True)
+#     front_photo = db.Column(db.String(200), nullable=False)
+#     left_photo = db.Column(db.String(200), nullable=False)
+#     back_photo = db.Column(db.String(200), nullable=False)
+#     right_photo = db.Column(db.String(200), nullable=False)
+#     plot_sketch = db.Column(db.String(200), nullable=False)
+#     entry_date_created = db.Column(db.DateTime, default=datetime.utcnow)
+#     surveyform_status = db.Column(db.Integer,default=0 , nullable=False)
+#     is_qc_done = db.Column(db.Integer,default=0 , nullable=False)
+#     is_validation_done = db.Column(db.Integer,default=0 , nullable=False)
+#     validator_remarks = db.Column(db.String(200), nullable=False)
+
+#     def __repr__(self):
+#         return f"<Plot {self.id}>"
 
 
 
@@ -231,7 +251,7 @@ def phone_no_validation():
     ]
  
     # Print the data before sending the response for debugging
-    print("Data being sent as JSON response:")
+    print("Data being sent as JSON response: user_data")
     print(users_data)
 
     # Return the users' data as a JSON response
@@ -241,6 +261,22 @@ def phone_no_validation():
                 # Module
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
                 # Input Survey Form
+
+
+
+# Configure upload folder and allowed extensions
+UPLOAD_FOLDER = 'images'  # Folder to store images
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif','jfif','avif'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Ensure the images folder exists
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+# Function to check if the file extension is allowed
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 # Route to fetch filtered dropdown data
 @app.route('/get_dropdown_values', methods=['GET'])
@@ -276,14 +312,6 @@ def get_dropdown_values():
     return jsonify(data)
 
 
-# Ensure the images folder exists
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
-
-# Function to check if the file extension is allowed
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 
 # Route to handle form submission
 @app.route('/submit_form_data', methods=['POST', 'GET'])
@@ -291,25 +319,31 @@ def submit_form_data():
     if request.method == 'POST':
         try:
             # Extract form data
-            user_name = request.form.get('user_name')
-            node_name = request.form.get('node_name')
-            sector_no = request.form.get('sector_no')
-            block_name = request.form.get('block_name')
-            plot_name = request.form.get('plot_name')
-            allotment_date = request.form.get('allotment_date')
-            original_allottee = request.form.get('original_allottee')
-            area = request.form.get('area')
-            use_of_plot = request.form.get('use_of_plot')
-            rate = request.form.get('rate')
-            ownerNtransferDate = request.form.get('ownerNtransferDate')
-            remarks = request.form.get('remarks')
+            user_name = request.form.get('user_name')#
+            node_name = request.form.get('node_name')#
+            sector_no = request.form.get('sector_no')#
+            block_name = request.form.get('block_name')#
+            plot_name = request.form.get('plot_name')#
+            plot_status = request.form.get('plot_status')
+            allotment_date = request.form.get('allotment_date')#
+            original_allottee = request.form.get('original_allottee')#
+            area = request.form.get('area')#
+            use_of_plot = request.form.get('use_of_plot')#
+            rate = request.form.get('rate')#
+            ownerNtransferDate = request.form.get('ownerNtransferDate')#
+            surveyor_remarks = request.form.get('surveyor_remarks')#
+            # is_qc_done = request.form.get('is_qc_done')   ...   this will not come here
+            # surveyform_status = request.form.get('surveyform_status')
+            # is_validation_done = request.form.get('is_validation_done')
+            # validator_remarks  = request.form.get('validator_remarks')
+
 
             # Process uploaded files
-            front_photo = request.files.get('front_photo')
-            left_photo = request.files.get('left_photo')
-            back_photo = request.files.get('back_photo')
-            right_photo = request.files.get('right_photo')
-            plot_sketch = request.files.get('plot_sketch')
+            front_photo = request.files.get('front_photo')#
+            left_photo = request.files.get('left_photo')#
+            back_photo = request.files.get('back_photo')#
+            right_photo = request.files.get('right_photo')#
+            plot_sketch = request.files.get('plot_sketch')#
 
             # Save each file if present and allowed
             def save_file(file):
@@ -328,36 +362,47 @@ def submit_form_data():
 
             # print(front_photo_filename,left_photo_filename)
 
+
+            print(user_name, node_name, sector_no, block_name, plot_name,plot_status, allotment_date, original_allottee, area, use_of_plot, rate, ownerNtransferDate, surveyor_remarks)
+            print("about to take store ")
+
             # Create a new plot_details record
-            new_plot = plot_details(
-                user_name=user_name,
+            new_plot = survey_form_data(
+                user_name=user_name, #
                 node_name=node_name,
                 sector_no=sector_no,
                 block_name=block_name,
                 plot_name=plot_name,
+                plot_status = plot_status,
                 allotment_date=allotment_date,
                 original_allottee=original_allottee,
                 area=area,
                 use_of_plot=use_of_plot,
                 rate=rate,
                 ownerNtransferDate=ownerNtransferDate,
-                remarks=remarks,
+                surveyor_remarks=surveyor_remarks,
                 front_photo=front_photo_filename,
                 left_photo=left_photo_filename,
                 back_photo=back_photo_filename,
                 right_photo=right_photo_filename,
-                plot_sketch=plot_sketch_filename
+                plot_sketch=plot_sketch_filename,
             )
 
+            print(';;;;;;;;;;')
+            print(f"User Name: {new_plot.user_name}")
+
+            print(new_plot)
             # Save to the database
             db.session.add(new_plot)
             db.session.commit()
+            print('committted to DB')
 
-            return redirect('/')
+            return redirect('/survey_user')
         except Exception as e:
             return f"There was an issue submitting the form: {str(e)}"
     else:
-        return render_template('index.html')
+        print("error aala ")
+        return render_template('survey_user.html')
 
 
 
@@ -406,9 +451,11 @@ def output_table():
         survey_form_data.sector_no,
         survey_form_data.block_name,
         survey_form_data.plot_name,
+        survey_form_data.plot_status,
         survey_form_data.entry_date_created,
         survey_form_data.user_name.label('surveyor_name'),  # Assuming 'user_name' is the surveyor's name
         survey_form_data.surveyformdata_uid,
+        survey_form_data.surveyor_remarks, # {}
         survey_form_data.surveyform_status,
         survey_form_data.is_qc_done,
         survey_form_data.is_validation_done,
@@ -423,9 +470,11 @@ def output_table():
             'sector_no': plot.sector_no,
             'block_name': plot.block_name,
             'plot_name': plot.plot_name,
+            'plot_status':plot.plot_status,
             'date_uploaded': plot.entry_date_created.strftime('%Y-%m-%d %H:%M:%S'),
             'surveyor_name': plot.surveyor_name,
             'surveyformdata_uid': plot.surveyformdata_uid,
+            'surveyor_remarks':plot.surveyor_remarks,
             'surveyform_status': plot.surveyform_status,
             'is_qc_done': plot.is_qc_done,
             'is_validation_done':plot.is_validation_done,
@@ -440,7 +489,7 @@ def output_table():
     return jsonify(output)
 
 
-# json_data = {}
+json_data = {}
 
 @app.route('/send_formid')
 def send_formid():
@@ -457,7 +506,6 @@ def send_formid():
     except Exception as e:
         print(f"Error occurred: {e}")
         return jsonify({"error": "Failed to retrieve data from the database"}), 500
-
 
 
 
@@ -509,7 +557,7 @@ def dropdown_values_admin_panel():
     }
 
     # Print the data before calling jsonify
-    print("Data being sent as JSON response:")
+    print("Data being sent as JSON response: data")
     print(data)  # This prints the Python dictionary  
     return jsonify(data)  # This sends the data as a JSON response
 
@@ -701,9 +749,6 @@ def update_values():
     
 
 
-                                         # Module
-#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                                        # Extras
 
 #----------------------------------------------
 # Employee Table (Admin) - Put Code here

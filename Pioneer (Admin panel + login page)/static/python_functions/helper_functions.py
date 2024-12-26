@@ -1,6 +1,7 @@
 # Flask and Flask-SQLAlchemy
-from flask import Flask
+from flask import Flask, render_template, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
+
 
 # Datetime module for date formatting
 from datetime import datetime
@@ -20,6 +21,7 @@ def extract_rows_from_db(survey_form_data,surveyformdata_uid):
                 'sector_no': plot_detail.sector_no,
                 'block_name': plot_detail.block_name,
                 'plot_name': plot_detail.plot_name,
+                'plot_status': plot_detail.plot_status,
                 'allotment_date': plot_detail.allotment_date.strftime('%Y-%m-%d'),  # Formatting the date
                 'original_allottee': plot_detail.original_allottee,
                 'area': plot_detail.area,

@@ -11,8 +11,6 @@ function closeModal() {
     const modal = document.getElementById('imageModal');
     modal.style.display = 'none';
 }
-
-
 function fetchPlotDetails() {
     fetch('/get_outputform_data')
         .then(response => response.json())
@@ -25,21 +23,24 @@ function fetchPlotDetails() {
 
                 // Populate the fields with fetched data
 
-
-                document.getElementById("surveyformdata_uid").value = data.surveyformdata_uid || "No data";
-                document.getElementById("entry_date_created").value = data.entry_date_created || "No data";
-                document.getElementById("user_name").value = data.user_name || "No data";
-                document.getElementById("node_name").value = data.node_name || "No data";
-                document.getElementById("sector_no").value = data.sector_no || "No data";
-                document.getElementById("block_name").value = data.block_name || "No data";
-                document.getElementById("plot_name").value = data.plot_name || "No data";
-                document.getElementById("plot_status").value = data.plot_status || "No data";
-                document.getElementById("surveyor_remarks").value = data.surveyor_remarks || "No data";
-                document.getElementById("allotment_date").value = data.allotment_date || "No data";
-                document.getElementById("original_allottee").value = data.original_allottee || "No data";
-                document.getElementById("area").value = data.area || "No data";
-                document.getElementById("use_of_plot").value = data.use_of_plot || "No data";
-                document.getElementById("rate").value = data.rate || "No data";
+                document.getElementById("surveyformdata_uid").textContent = data.surveyformdata_uid || "No data";
+                document.getElementById("entry_date_created").textContent = data.entry_date_created || "No data";
+                document.getElementById("user_name").textContent = data.user_name || "No data";
+                document.getElementById("node_name").textContent = data.node_name || "No data";
+                document.getElementById("sector_no").textContent = data.sector_no || "No data";
+                document.getElementById("block_name").textContent = data.block_name || "No data";
+                document.getElementById("plot_name").textContent = data.plot_name || "No data";
+                document.getElementById("plot_status").textContent = data.plot_status || "No data";
+                document.getElementById("surveyor_remarks").textContent = data.remarks || "No data";
+                document.getElementById("allotment_date").textContent = data.allotment_date || "No data";
+                document.getElementById("original_allottee").textContent = data.original_allottee || "No data";
+                document.getElementById("area").textContent = data.area || "No data";
+                document.getElementById("use_of_plot").textContent = data.use_of_plot || "No data";
+                document.getElementById("rate").textContent = data.rate || "No data";
+                document.getElementById("surveyform_status").textContent = data.surveyform_status || "No data";
+                document.getElementById("is_qc_done").textContent = data.is_qc_done || "No data";
+                document.getElementById("is_validation_done").textContent = data.is_validation_done || "No data";
+                document.getElementById("validator_remarks").textContent = data.validator_remarks || "No data";
                 
                 // Handle photos
                 document.getElementById("front_photo").src = data.front_photo ? 
@@ -81,7 +82,6 @@ headers.forEach(function(header) {
 
                table.appendChild(tableHeader);
                
-
                // Loop through the owners (up to 12)
                for (let i = 1; i <= 11; i++) {
                    const ownerNameKey = `t${i}owner_name`;
@@ -98,8 +98,8 @@ headers.forEach(function(header) {
                        const row = document.createElement("tr");
                        row.innerHTML = `
                            <td>Owner ${i + 1}</td>  <!-- Start numbering from Owner 2 -->
-                           <td><input type="text" value='${ownerName}'></input></td>
-                           <td><input type="date" value='${transferDate}'></input></td>
+                           <td>${ownerName}</td>
+                           <td>${transferDate}</td>
                        `;
                        table.appendChild(row);
                    }
@@ -123,3 +123,61 @@ headers.forEach(function(header) {
 window.onload = function() {
     fetchPlotDetails();  // Fetch data as soon as the page loads
 };
+
+document.getElementById("acceptValidationButton").addEventListener("click", () => {
+    const surveyformdata_uid = document.getElementById("surveyformdata_uid").textContent;
+    
+    // Confirmation alert
+    if (confirm("Are you sure you want to accept?")) {
+        // Update database
+        fetch('/update_validation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                surveyformdata_uid: surveyformdata_uid,
+                is_validation_done: 1,
+                surveyform_status: 2,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message || "Validation Accepted!");
+        })
+        .catch(error => {
+            console.error("Error updating validation:", error);
+        });
+    }
+});
+
+document.getElementById("rejectValidationButton").addEventListener("click", () => {
+    const surveyformdata_uid = document.getElementById("surveyformdata_uid").textContent;
+  
+    // Prompt for remarks
+    const remarks = prompt("Please provide remarks for rejection:");
+    if (remarks !== null) {
+        // Update database
+        fetch('/update_validation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                surveyformdata_uid: surveyformdata_uid,
+                is_validation_done: 2,
+                is_qc_done: 2,
+                surveyform_status: 0,
+                validator_remarks: remarks,
+            }),
+        })
+        
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message || "Validation Rejected!");
+        })
+        .catch(error => {
+            console.error("Error updating validation:", error);
+        });
+    }
+});

@@ -37,6 +37,7 @@ function generateTableRows(data) {
             <td>${item.sector_no}</td>
             <td>${item.block_name}</td>
             <td>${item.plot_name}</td>
+            <td>${item.plot_status}</td>
             <td>${item.surveyform_status}</td>
             <td>${item.is_qc_done}</td>
             <td>${item.is_validation_done}</td>
@@ -70,7 +71,7 @@ function sendFormID(formID) {
         }
     };
     xhr.send();
-    }
+}
 
 // Function to set the default selected month and year as the current month
 function setDefaultDate() {

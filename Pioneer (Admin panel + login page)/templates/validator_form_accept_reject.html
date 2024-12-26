@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="../static/css/survey_output_form.css">
 </head>
 <body>
-    <form action=""></form>
     <div class="container">
         <!-- Survey Details Section -->
         <section>
@@ -43,7 +42,7 @@
                     <td><span id="plot_name">No data</span></td>
                 </tr>
                 <tr>
-                    <td><strong>surveyor_remarks:</strong></td>
+                    <td><strong>Remarks:</strong></td>
                     <td><span id="surveyor_remarks">No data</span></td>
                 </tr>
             </table>
@@ -69,9 +68,7 @@
                     <td><strong>Rate (sqm):</strong></td>
                     <td><span id="rate">No data</span></td>
                     <td><strong>Plot Status:</strong></td>
-                    <td>
-                        <span id="plot_status">No data</span>
-                    </td>
+                    <td><span id="plot_status">No data</span></td>
                 </tr>
             </table>
         </section>
@@ -110,17 +107,20 @@
             </div>
         </section>
     </div>
-    <button style="position: fixed; bottom: 20px; right: 20px;" id="acceptPushButton">Accept and Push for Validation</button>
-    <a href="/editByQC"><button style="position: fixed; top: 20px; right: 20px;" id="editForm">Edit</button></a>
 
     <!-- Modal for image view -->
     <div id="imageModal" class="modal" onclick="closeModal()">
         <span class="close">&times;</span>
         <img id="modalImg" class="modal-content" alt="Full View">
     </div>
-
-    <script src="../static/js/qc_form.js"></script>
+    <div>
+        <button id="acceptValidationButton">Accept</button>
+        <button id="rejectValidationButton">Reject</button>
+    </div>
+    
+    <input type="hidden" id="surveyformdata_uid" value="{{ surveyformdata_uid }}"> <!-- Dynamic UID -->
+    
+    <script src="../static/js/validator_form_accept_reject.js"></script>
 
 </body>
 </html>
-

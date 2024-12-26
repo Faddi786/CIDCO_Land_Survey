@@ -50,6 +50,19 @@
                 <td><input type="number" id="rate" name="rate" required /></td>
                 
             </tr>
+            <tr >
+                <td colspan="2"><label for="plot_status">Plot Status:</label></td>
+                <td colspan="2">
+                    <select id="plot_status" name="plot_status" required>
+                        <option value="">Select</option>
+                        <option value="constructed">Constructed</option>
+                        <option value="under_construction">Under-Construction</option>
+                        <option value="abandoned">Abandoned</option>
+                    </select>
+                </td>
+
+                
+            </tr>
 
 
         </table>
@@ -88,8 +101,8 @@
         <label for="plot_sketch">Plot Sketch Photo:</label>
         <input type="file" id="plot_sketch" name="plot_sketch" accept="image/*" required />
 
-        <label for="remarks">Remarks:</label>
-        <textarea id="remarks" name="remarks" required ></textarea>
+        <label for="surveyor_remarks">Remarks:</label>
+        <textarea id="surveyor_remarks" name="surveyor_remarks" required ></textarea>
 
         <button type="submit">Final Submit</button>
 
