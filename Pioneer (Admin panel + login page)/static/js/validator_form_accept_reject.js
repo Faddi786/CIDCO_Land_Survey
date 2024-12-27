@@ -6,11 +6,15 @@ function openModal(image) {
     modalImg.src = image.src;
 }
 
-// Close modal
+// Close image modal
 function closeModal() {
     const modal = document.getElementById('imageModal');
     modal.style.display = 'none';
 }
+
+
+// copy the  main prt from editByQC.js file 
+
 function fetchPlotDetails() {
     fetch('/get_outputform_data')
         .then(response => response.json())
@@ -23,36 +27,33 @@ function fetchPlotDetails() {
 
                 // Populate the fields with fetched data
 
-                document.getElementById("surveyformdata_uid").textContent = data.surveyformdata_uid || "No data";
-                document.getElementById("entry_date_created").textContent = data.entry_date_created || "No data";
-                document.getElementById("user_name").textContent = data.user_name || "No data";
-                document.getElementById("node_name").textContent = data.node_name || "No data";
-                document.getElementById("sector_no").textContent = data.sector_no || "No data";
-                document.getElementById("block_name").textContent = data.block_name || "No data";
-                document.getElementById("plot_name").textContent = data.plot_name || "No data";
-                document.getElementById("plot_status").textContent = data.plot_status || "No data";
-                document.getElementById("surveyor_remarks").textContent = data.remarks || "No data";
-                document.getElementById("allotment_date").textContent = data.allotment_date || "No data";
-                document.getElementById("original_allottee").textContent = data.original_allottee || "No data";
-                document.getElementById("area").textContent = data.area || "No data";
-                document.getElementById("use_of_plot").textContent = data.use_of_plot || "No data";
-                document.getElementById("rate").textContent = data.rate || "No data";
-                document.getElementById("surveyform_status").textContent = data.surveyform_status || "No data";
-                document.getElementById("is_qc_done").textContent = data.is_qc_done || "No data";
-                document.getElementById("is_validation_done").textContent = data.is_validation_done || "No data";
-                document.getElementById("validator_remarks").textContent = data.validator_remarks || "No data";
+
+                document.getElementById("surveyformdata_uid").textContent  = data.surveyformdata_uid || "No data";
+                document.getElementById("entry_date_created").textContent  = data.entry_date_created || "No data";
+                document.getElementById("user_name").textContent  = data.user_name || "No data";
+                document.getElementById("node_name").textContent  = data.node_name || "No data";
+                document.getElementById("sector_no").textContent  = data.sector_no || "No data";
+                document.getElementById("block_name").value = data.block_name || "No data";
+                document.getElementById("plot_name").textContent  = data.plot_name || "No data";
+                document.getElementById("plot_status").textContent  = data.plot_status || "No data";
+                document.getElementById("surveyor_remarks").textContent  = data.surveyor_remarks || "No data";
+                document.getElementById("allotment_date").textContent  = data.allotment_date || "No data";
+                document.getElementById("original_allottee").textContent  = data.original_allottee || "No data";
+                document.getElementById("area").textContent  = data.area || "No data";
+                document.getElementById("use_of_plot").textContent  = data.use_of_plot || "No data";
+                document.getElementById("rate").textContent  = data.rate || "No data";
                 
                 // Handle photos
                 document.getElementById("front_photo").src = data.front_photo ? 
-                    `static/uploads/${data.front_photo}` : "path/to/default-image.jpg";
+                    `static/uploads/${data.front_photo}` : "static/uploads/default.png";
                 document.getElementById("left_photo").src = data.left_photo ? 
-                    `static/uploads/${data.left_photo}` : "path/to/default-image.jpg";
+                    `static/uploads/${data.left_photo}` : "static/uploads/default.png";
                 document.getElementById("back_photo").src = data.back_photo ? 
-                    `static/uploads/${data.back_photo}` : "path/to/default-image.jpg";
+                    `static/uploads/${data.back_photo}` : "static/uploads/default.png";
                 document.getElementById("right_photo").src = data.right_photo ? 
-                    `static/uploads/${data.right_photo}` : "path/to/default-image.jpg";
+                    `static/uploads/${data.right_photo}` : "static/uploads/default.png";
                 document.getElementById("plot_sketch").src = data.plot_sketch ? 
-                    `static/uploads/${data.plot_sketch}` : "path/to/default-image.jpg";
+                    `static/uploads/${data.plot_sketch}` : "static/uploads/default.png";
                 
                 // Optionally update alt text to handle missing photos
                 document.getElementById("front_photo").alt = data.front_photo ? data.front_photo : "No Photo for front";
@@ -82,6 +83,7 @@ headers.forEach(function(header) {
 
                table.appendChild(tableHeader);
                
+
                // Loop through the owners (up to 12)
                for (let i = 1; i <= 11; i++) {
                    const ownerNameKey = `t${i}owner_name`;
@@ -98,8 +100,8 @@ headers.forEach(function(header) {
                        const row = document.createElement("tr");
                        row.innerHTML = `
                            <td>Owner ${i + 1}</td>  <!-- Start numbering from Owner 2 -->
-                           <td>${ownerName}</td>
-                           <td>${transferDate}</td>
+                           <td><input type="text" value='${ownerName}'></input></td>
+                           <td><input type="date" value='${transferDate}'></input></td>
                        `;
                        table.appendChild(row);
                    }
@@ -123,6 +125,8 @@ headers.forEach(function(header) {
 window.onload = function() {
     fetchPlotDetails();  // Fetch data as soon as the page loads
 };
+
+
 
 document.getElementById("acceptValidationButton").addEventListener("click", () => {
     const surveyformdata_uid = document.getElementById("surveyformdata_uid").textContent;

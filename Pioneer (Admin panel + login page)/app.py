@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, jsonify
+from flask import Flask, render_template, request, redirect, jsonify,session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
@@ -7,10 +7,6 @@ from werkzeug.utils import secure_filename
 from multiprocessing import connection
 from flask_cors import CORS
 from static.python_functions import helper_functions
-
-app = Flask(__name__)
-
-
 
 
 app = Flask(__name__)
@@ -70,6 +66,10 @@ def admin_user():
 def admin_table():
     return render_template('admin.html')
 
+@app.route('/userInfo_edit_byAdmin')
+def userInfo_edit_byAdmin():
+    return render_template('userInfo_edit_byAdmin.html')
+
 
 # Route for the user page
 @app.route('/qc_user')
@@ -111,9 +111,23 @@ def validator_form_accept_reject():
     return render_template('validator_form_accept_reject.html')
 
 
-@app.route("/editByQC",methods=['GET'])
+
+@app.route('/validator_table')
+def validator_table():
+    return render_template('validatorOUTPUTtable.html')
+
+
+
+@app.route("/editByQC",methods=['POST','GET'])
 def editByQC():
     return render_template('editByQC.html')
+
+
+# {}
+
+
+
+# {}
 
 
 #----------------------------------------------------------------------------------------------------
@@ -121,9 +135,13 @@ def editByQC():
 
 class user_info(db.Model):
     userinfo_uid = db.Column(db.Integer, primary_key=True)
-    phone_no = db.Column(db.Integer, nullable=False)
+    phone_no = db.Column(db.Integer, nullable=False)    # not sure yaha dataType biginteger aiga k nai... since DB me bigINt hai
     name = db.Column(db.String(100), nullable=False)
     role = db.Column(db.Integer, nullable=False)
+    value_softdel = db.Column(db.Integer)
+
+    def __repr__(self):
+        return f'<DropdownValues are : {self.userinfo_uid}, {self.phone_no}, {self.name}, {self.name}, {self.role},{self.value_softdel}>'
 
 
 # Define the model for dropdown_values table
@@ -336,7 +354,7 @@ def submit_form_data():
             # surveyform_status = request.form.get('surveyform_status')
             # is_validation_done = request.form.get('is_validation_done')
             # validator_remarks  = request.form.get('validator_remarks')
-
+ 
 
             # Process uploaded files
             front_photo = request.files.get('front_photo')#
@@ -421,7 +439,7 @@ def submit_form_data():
 
 
 # Example route to query plot details
-@app.route('/query_plots', methods=['POST'])
+@app.route('/query_plots', methods=['POST','GET'])
 def query_plots():
     # Retrieve the button value from the form
     button = request.form.get('button', 'default')
@@ -435,7 +453,7 @@ def query_plots():
 
     # Use the query function
     try:
-        results = helper_functions.query_plot_details(role, button, sector)
+        results = query_plot_details(role, button, sector)
         return jsonify([plot.to_dict() for plot in results])  # Convert results to JSON-friendly format
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -500,7 +518,7 @@ def send_formid():
 
       # Extract data from the DB based on the form_id
     try:
-        json_data = helper_functions.extract_rows_from_db(survey_form_data,surveyformdata_uid)
+        json_data = extract_rows_from_db(surveyformdata_uid)
         print('This is the data that we extracted from db for the id ', json_data)  # This is your data for the given form_id
         return jsonify({"message": "Form ID received successfully"}), 200
     except Exception as e:
@@ -510,18 +528,68 @@ def send_formid():
 
 
 
-@app.route('/get_outputform_data')
+@app.route('/get_outputform_data' )
 def get_outputform_data():
     global json_data
-    print('this is the filtered df for the given form id', json_data)
+    print('this is the filtered df for the given form id   ..................  get_outputform_data ', json_data)
 
     # Convert DataFrame to JSON
     return jsonify(json_data)
 
 
 
+# {} UPDATE IN DB BY QC
 
 
+
+# {}
+
+
+
+
+
+
+@app.route('/update_validation', methods=['POST'])
+def update_validation():
+    
+    request_data = request.get_json()
+
+    surveyformdata_uid = request_data.get('surveyformdata_uid')
+    is_validation_done = request_data.get('is_validation_done')
+    surveyform_status = request_data.get('surveyform_status')
+    is_qc_done = request_data.get('is_qc_done')
+    validator_remarks = request_data.get('validator_remarks')
+    print("Received data:", request_data)
+
+    if not surveyformdata_uid or is_validation_done is None:
+        return jsonify({"error": "Missing required fields"}), 400
+
+    try:
+        # Query the existing record
+        survey_form = db.session.query(survey_form_data).filter_by(surveyformdata_uid=surveyformdata_uid).first()
+        
+        if not survey_form:
+            return jsonify({"error": "Survey form not found"}), 404
+
+        # Update the fields based on validation status
+        if is_validation_done == 1:  # Accept
+            survey_form.is_validation_done = is_validation_done
+            survey_form.surveyform_status = surveyform_status
+        elif is_validation_done == 2:  # Reject
+            survey_form.is_validation_done = is_validation_done
+            survey_form.is_qc_done = is_qc_done
+            survey_form.surveyform_status = surveyform_status
+            survey_form.validator_remarks = validator_remarks
+
+        # Commit changes to the database
+        db.session.commit()
+
+        return jsonify({"message": "Validation updated successfully!"})
+
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        print(f"Error: {e}")
+        return jsonify({"error": "An error occurred while updating validation"}), 500
 
 
 
@@ -756,10 +824,256 @@ def update_values():
 
 
 
+
+# {} helper functions
+
+def extract_rows_from_db(surveyformdata_uid):
+    try:
+        # Query the survey_form_data table using the given surveyformdata_uid
+        plot_detail = survey_form_data.query.filter(survey_form_data.surveyformdata_uid == surveyformdata_uid).first()
+
+        if plot_detail:
+            # Return the data as a dictionary
+            return {
+                'surveyformdata_uid': surveyformdata_uid,
+                'user_name': plot_detail.user_name,
+                'node_name': plot_detail.node_name,
+                'sector_no': plot_detail.sector_no,
+                'block_name': plot_detail.block_name,
+                'plot_name': plot_detail.plot_name,
+                'plot_status': plot_detail.plot_status,
+                'allotment_date': plot_detail.allotment_date.strftime('%Y-%m-%d'),  # Formatting the date
+                'original_allottee': plot_detail.original_allottee,
+                'area': plot_detail.area,
+                'use_of_plot': plot_detail.use_of_plot,
+                'rate': plot_detail.rate,
+                'ownerNtransferDate':plot_detail.ownerNtransferDate,
+                'surveyor_remarks': plot_detail.surveyor_remarks,
+                'front_photo': plot_detail.front_photo,
+                'left_photo': plot_detail.left_photo,
+                'back_photo': plot_detail.back_photo,
+                'right_photo': plot_detail.right_photo,
+                'plot_sketch': plot_detail.plot_sketch,
+                'entry_date_created': plot_detail.entry_date_created.strftime('%Y-%m-%d %H:%M:%S'),  # Formatting the datetime
+                'surveyform_status': plot_detail.surveyform_status,
+                'is_qc_done':plot_detail.is_qc_done,
+                'is_validation_done':plot_detail.is_validation_done,
+                'validator_remarks':plot_detail.validator_remarks
+            }
+        else:
+            # If no record is found, return an error message
+            return {'error': 'Plot details not found'}
+    
+    except Exception as e:
+        # Handle any exceptions that might occur during the query
+        return {'error': f'An error occurred: {str(e)}'}
+
+
+
+def query_plot_details(role, button, sector):
+    query = survey_form_data.query
+    data = request.get_json()
+    selected_button = data.get('selectedButton')  # Button: 'default', 'accept', 'reject', etc.
+    #date_filter = data.get('dateFilter')         # Month-Year filter if applicable
+    role = request.args.get('role')              # Assuming the role is passed as a query param
+    sector = request.args.get('sector')   
+    role='qc'
+
+   # Apply filtering based on role and button
+    if role == 'qc':
+        if selected_button == "default":
+            query = query.filter_by(is_qc_done='0', sector_no=sector)
+        elif selected_button == "accept":
+            query = query.filter_by(is_qc_done='1', sector_no=sector)
+        elif selected_button == "reject":
+            query = query.filter_by(is_validation_done='2', sector_no=sector)
+
+    elif role == 'validator':
+        if selected_button == "default":
+            query = query.filter_by(is_validation_done='0', sector_no=sector)
+        elif selected_button == "accept":
+            query = query.filter_by(is_validation_done='1', sector_no=sector)
+        elif selected_button == "reject":
+            query = query.filter_by(is_validation_done='2', sector_no=sector)
+
+    elif role == 'admin':
+        if selected_button == "complete":
+            query = query.filter_by(surveyform_status='1', sector_no=sector)
+        elif selected_button == "incomplete":
+            query = query.filter_by(surveyform_status='0', sector_no=sector)
+        elif selected_button == "pending(QC end)":
+            query = query.filter_by(is_qc_done='0', sector_no=sector)
+        elif selected_button == "pending(Validator end)":
+            query = query.filter_by(is_validation_done='0', sector_no=sector)
+
+    # If no button is selected (clear filter), fetch all data
+    if not selected_button:
+        query = survey_form_data.query.filter_by(sector_no=sector)
+
+    results = query.all()
+    return jsonify([result.to_dict() for result in results])
+# {}
+
+
+
+
+
+
 #----------------------------------------------
                 # Dashboard code here 
+#----------------------------------------------
 
 
+
+
+
+
+
+# {}
+# user info editsection trial code --------------------------------------------------------------------------------------------
+
+
+
+
+# 
+# Route to fetch filtered dropdown data
+@app.route('/get_editUser_values', methods=['GET'])
+def get_editUser_values():
+    # Get filter parameters from request arguments
+    name = request.args.get('name')
+    phone_no = request.args.get('phone_no')
+    role = request.args.get('role')
+
+    # Query the database and filter based on the parameters
+    query = user_info.query
+
+    if name:
+        query = query.filter_by(name=name)
+    if phone_no:
+        query = query.filter_by(phone_no=phone_no)
+    if role:
+        query = query.filter_by(role=role)
+
+    userEdit = query.all()
+
+    # Prepare the response data with unique values
+    data = {
+        'name': list(set(item.name for item in userEdit if item.name)),
+        'phone_no': list(set(item.phone_no for item in userEdit if item.phone_no)),
+        'role': list(set(item.role for item in userEdit if item.role))
+    }
+
+    print("Filtered data being sent as JSON response:")
+    print(data)
+
+    return jsonify(data)
+# 
+
+
+
+
+
+@app.route('/userEdit_values_admin_panel', methods=['GET'])
+def userEdit_values_admin_panel():
+    # the thing doesnt ends here since we are using soft delte with the help of the another column as is_dropdownvalues_active so when the page loads the filtering logic where we have put we also have to consider a condition that to filter the data where is_dropdownvalues_active is 1
+    # dont use all instead add a condition that is_dropdownvalues_active should be 1 where 1 means active
+    
+    # Query all the values from the DropdownValues table
+    userEdit = user_info.query.filter_by(value_softdel=1).all()
+
+
+    # Prepare the data to be returned as JSON
+    data = {
+        'userinfo_uid': [item.userinfo_uid for item in userEdit],
+        'name': [item.name for item in userEdit],
+        'phone_no': [item.phone_no for item in userEdit],
+        'role': [item.role for item in userEdit],
+        'value_softdel':[item.value_softdel for item in userEdit]
+    }
+
+    # Print the data before calling jsonify
+    print("Data being sent as JSON response: data")
+    print(data)  # This prints the Python dictionary  
+    return jsonify(data)  # This sends the data as a JSON response
+
+
+
+    
+# Route to update data in the database
+@app.route('/update_userEdit_values', methods=['POST'])
+def update_userEdit():
+    # Get the updated data from the frontend
+    updated_data = request.get_json()  # Get the JSON data sent from frontend
+    
+    print("rolcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheck")
+    print(updated_data)
+    print("checkcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheckcheck")
+    # Extract values from the received JSON
+    name = updated_data.get('column1')
+    phone_no = updated_data.get('column2')
+    role = updated_data.get('column3')
+    userinfo_uid = updated_data.get('uid')
+    #first take the uid that we are getting from the requrest
+    # then go in the dropdownvalue_uid column match this uid if match found then go in the is_dropdownvalues_active and set this value to 0 
+    # so basically we are soft deleleting the entry but the data persists in the database table
+    
+    print("these si the uid")
+    print(userinfo_uid)
+
+
+    print("these are the values we got from the updated drop down values")
+    print(name,phone_no,role)
+    # Find the record in the database to update (example: updating the first record)
+    record = user_info.query.filter_by(userinfo_uid=userinfo_uid).first() # You can modify this to update a specific record
+
+    # Update the fields
+    if record:
+        record.name = name
+        record.phone_no = phone_no
+        record.role = role
+
+        # Commit the changes to the database
+        db.session.commit()
+
+        # Return success response
+        return jsonify({'success': True})
+
+    return jsonify({'success': False, 'message': 'Record not found'})
+    
+
+
+# Define the route to handle the delete request
+@app.route('/delete_user_values', methods=['POST'])
+def delete_user_values():
+    # Get the JSON data sent from the front end
+    request_data = request.get_json()
+    
+    # Extract the uid from the request data
+    uid_to_delete = request_data.get('uid')
+    
+    # Print the UID to the console
+    print("Received UID to delete:", uid_to_delete)
+
+    record = user_info.query.filter_by(userinfo_uid=uid_to_delete).first()
+    print(f"value of record is: {record}")
+
+    
+    if record:
+        # Update the 'value_softDel' column to 0
+        record.value_softdel = 0
+        
+        # Commit the changes to the database
+        db.session.commit()
+
+        # # Optionally, refresh the record to ensure the update is applied
+        # db.session.refresh(record)
+        
+        # Respond back to the front end
+        return jsonify({'message': 'Record updated successfully', 'uid': uid_to_delete})
+    else:
+        return jsonify({'message': 'UID not found', 'uid': uid_to_delete}), 404
+
+# {}------------------------------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
     app.run(debug=True)

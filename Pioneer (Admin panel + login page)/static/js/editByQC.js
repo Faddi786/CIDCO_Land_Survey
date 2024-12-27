@@ -6,7 +6,7 @@ function openModal(image) {
     modalImg.src = image.src;
 }
 
-// Close modal
+// Close image modal
 function closeModal() {
     const modal = document.getElementById('imageModal');
     modal.style.display = 'none';
@@ -64,6 +64,7 @@ function fetchPlotDetails() {
                 let validOwnerDataExists = false;
                 const transferDetailsDiv = document.getElementById("transferDetails");
 
+
                // Create table to display owner details in three columns
                const table = document.createElement("table");
                const tableHeader = document.createElement("tr");
@@ -104,7 +105,6 @@ headers.forEach(function(header) {
                        table.appendChild(row);
                    }
                }
-
                // Append the table to the transferDetails div
                transferDetailsDiv.appendChild(table);
 

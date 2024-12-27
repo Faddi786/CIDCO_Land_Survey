@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Viewer</title>
+    <link rel="stylesheet" href="../static/css/output_table.css">  
+</head>
+<body>
+    <h1>Data Viewer</h1>
+
+    <!-- Search Bar and Date Filter -->
+    <label for="searchBar">Search by Surveyor Name:</label>
+    <input type="text" id="searchBar" placeholder="Enter name...">
+
+    <label for="dateFilter">Filter by Month-Year:</label>
+    <input type="month" id="dateFilter">
+
+ <!-- Buttons Section --> 
+<div id="buttonContainer">
+    <button id="default" class="filter-button" onclick="toggleFilter('default')">Default</button>
+    <button id="accept" class="filter-button" onclick="toggleFilter('accept')">Accepted List</button>
+    <button id="reject" class="filter-button" onclick="toggleFilter('reject')">Rejected List</button>
+</div>
+
+
+    <!-- Data Table -->
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>View</th>
+                <th>Serial No</th>
+                <th>Form ID</th>
+                <th>Name of Surveyor</th>
+                <th>Date of Upload</th>
+                <th>Name of Node</th>
+                <th>Sector No</th>
+                <th>Block Name</th>
+                <th>Plot No</th>
+                <th>Plot Status</th>
+                <th>Form Status</th>
+                <th>QC Status</th>
+                <th>Validator Status</th>
+                <th>Validator Remarks</th>
+            </tr>
+        </thead>
+        <tbody id="dataTable1"></tbody>
+    </table>
+<script src = "../static/js/validatorOUTPUTtable.js"></script>
+</body>
+</html>
