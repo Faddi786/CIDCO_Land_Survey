@@ -21,7 +21,6 @@ app.config['UPLOAD_FOLDER'] = './uploads'  # Folder to save uploaded files
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Akhatri%402023@localhost/plot_details_db'
 db = SQLAlchemy(app)
 
-
 #--------------------------------------------------------------------------------
                                     # Template Routes
 @app.route('/')
@@ -174,6 +173,8 @@ class survey_form_data(db.Model):
     original_allottee = db.Column(db.String(200), nullable=True)#
     area = db.Column(db.String(1000), nullable=True)#
     use_of_plot = db.Column(db.String(100), nullable=True)#
+    FSI = db.Column(db.Float, nullable=True)
+    term_of_lease = db.Column(db.Integer ,nullable=True)
     rate = db.Column(db.Float, nullable=True)#
     ownerNtransferDate = db.Column(db.String(10000), nullable=True)#
     surveyor_remarks = db.Column(db.Text, nullable=True)#
@@ -190,40 +191,6 @@ class survey_form_data(db.Model):
 
     def __repr__(self):
         return f"<Plot {self.surveyformdata_uid}>"
-
-
-# given below is somewhat incorrect 
-
-# # Model for storing plot details
-# class survey_form_data(db.Model):
-#     surveyformdata_uid = db.Column(db.Integer, primary_key=True)
-#     user_name = db.Column(db.String(200), nullable=False)
-#     node_name = db.Column(db.String(100), nullable=False)
-#     sector_no = db.Column(db.String(100), nullable=False)
-#     block_name = db.Column(db.String(100), nullable=False)
-#     plot_name = db.Column(db.String(100), nullable=False)
-#     allotment_date = db.Column(db.Date, nullable=False)
-#     original_allottee = db.Column(db.String(200), nullable=False)
-#     area = db.Column(db.Float, nullable=False)
-#     use_of_plot = db.Column(db.String(100), nullable=False)
-#     rate = db.Column(db.Float, nullable=False)
-#     ownerNtransferDate = db.Column(db.Text, nullable=True)
-#     surveyor_remarks = db.Column(db.Text, nullable=True)
-#     front_photo = db.Column(db.String(200), nullable=False)
-#     left_photo = db.Column(db.String(200), nullable=False)
-#     back_photo = db.Column(db.String(200), nullable=False)
-#     right_photo = db.Column(db.String(200), nullable=False)
-#     plot_sketch = db.Column(db.String(200), nullable=False)
-#     entry_date_created = db.Column(db.DateTime, default=datetime.utcnow)
-#     surveyform_status = db.Column(db.Integer,default=0 , nullable=False)
-#     is_qc_done = db.Column(db.Integer,default=0 , nullable=False)
-#     is_validation_done = db.Column(db.Integer,default=0 , nullable=False)
-#     validator_remarks = db.Column(db.String(200), nullable=False)
-
-#     def __repr__(self):
-#         return f"<Plot {self.id}>"
-
-
 
 # Define the sector_table model
 class sector_table(db.Model):
@@ -347,13 +314,11 @@ def submit_form_data():
             original_allottee = request.form.get('original_allottee')#
             area = request.form.get('area')#
             use_of_plot = request.form.get('use_of_plot')#
+            FSI = request.form.get('FSI')
+            term_of_lease = request.form.get('term_of_lease')
             rate = request.form.get('rate')#
             ownerNtransferDate = request.form.get('ownerNtransferDate')#
             surveyor_remarks = request.form.get('surveyor_remarks')#
-            # is_qc_done = request.form.get('is_qc_done')   ...   this will not come here
-            # surveyform_status = request.form.get('surveyform_status')
-            # is_validation_done = request.form.get('is_validation_done')
-            # validator_remarks  = request.form.get('validator_remarks')
  
 
             # Process uploaded files
@@ -381,7 +346,7 @@ def submit_form_data():
             # print(front_photo_filename,left_photo_filename)
 
 
-            print(user_name, node_name, sector_no, block_name, plot_name,plot_status, allotment_date, original_allottee, area, use_of_plot, rate, ownerNtransferDate, surveyor_remarks)
+            print(user_name, node_name, sector_no, block_name, plot_name,plot_status, allotment_date, original_allottee, area, use_of_plot,FSI,term_of_lease, rate, ownerNtransferDate, surveyor_remarks)
             print("about to take store ")
 
             # Create a new plot_details record
@@ -396,6 +361,8 @@ def submit_form_data():
                 original_allottee=original_allottee,
                 area=area,
                 use_of_plot=use_of_plot,
+                FSI = FSI,
+                term_of_lease = term_of_lease,
                 rate=rate,
                 ownerNtransferDate=ownerNtransferDate,
                 surveyor_remarks=surveyor_remarks,
@@ -846,6 +813,8 @@ def extract_rows_from_db(surveyformdata_uid):
                 'original_allottee': plot_detail.original_allottee,
                 'area': plot_detail.area,
                 'use_of_plot': plot_detail.use_of_plot,
+                'FSI' : plot_detail.FSI,
+                'term_of_lease' : plot_detail.term_of_lease,
                 'rate': plot_detail.rate,
                 'ownerNtransferDate':plot_detail.ownerNtransferDate,
                 'surveyor_remarks': plot_detail.surveyor_remarks,

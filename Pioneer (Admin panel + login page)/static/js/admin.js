@@ -68,7 +68,7 @@ function editRow(button) {
     row.querySelector('.updateBtn').style.display = 'inline-block';
     row.querySelector('.cancelBtn').style.display = 'inline-block';
 }
-
+ 
 // Function to update the row with new values and send to Flask route
 function updateRow(button) {
   var row = button.parentNode.parentNode;

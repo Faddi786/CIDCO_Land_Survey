@@ -39,6 +39,8 @@ function fetchPlotDetails() {
                 document.getElementById("original_allottee").value = data.original_allottee || "No data";
                 document.getElementById("area").value = data.area || "No data";
                 document.getElementById("use_of_plot").value = data.use_of_plot || "No data";
+                document.getElementById("FSI").value = data.FSI || "No data";
+                document.getElementById("term_of_lease").value = data.term_of_lease || "No data";
                 document.getElementById("rate").value = data.rate || "No data";
                 
                 // Handle photos

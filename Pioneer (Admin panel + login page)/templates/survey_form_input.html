@@ -14,6 +14,7 @@
 
         <h2>Section 1 - Identity of Plot</h2>
         <table class="form-table" border="1">
+            <button id="clear_button" type="button">Clear</button>
             <tr>
                 <td><label for="node_name">Name of Node:</label></td>
                 <td><input type="text" id="node_name" name="node_name" placeholder="Start typing Node Name..." required  /></td>
@@ -50,6 +51,21 @@
                 <td><input type="number" id="rate" name="rate" required /></td>
                 
             </tr>
+            <!-- extra -->
+            <tr>  
+                <td><label for="FSI">FSI:</label></td>
+                <td>
+                    <select id="FSI" name="FSI" required >
+                        <option value="">Select</option>
+                        <option value="1">1</option>
+                        <option value="1.5">1.5</option>
+                    </select>
+                </td>
+                <td><label for="term_of_lease">Term of Lease:</label></td>
+                <td><input type="number" id="term_of_lease" name="term_of_lease" required min="1" max="999" /></td> 
+            </tr>
+            <!-- extra -->
+
             <tr >
                 <td colspan="2"><label for="plot_status">Plot Status:</label></td>
                 <td colspan="2">
@@ -58,6 +74,8 @@
                         <option value="constructed">Constructed</option>
                         <option value="under_construction">Under-Construction</option>
                         <option value="abandoned">Abandoned</option>
+                        <option value="Open">Open</option>
+
                     </select>
                 </td>
 

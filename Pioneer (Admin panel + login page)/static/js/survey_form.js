@@ -3,8 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const sectorInput = document.getElementById("sector_no");
     const blockInput = document.getElementById("block_name");
     const plotInput = document.getElementById("plot_name");
- 
-    // Store the autocomplete data for validation
+    const clearButton = document.getElementById("clear_button");
 
     let autocompleteData = {
         Node_Name: [],
@@ -13,20 +12,63 @@ document.addEventListener("DOMContentLoaded", function () {
         Plot_No: []
     };
 
-    // Set initial states
-    nodeInput.style.backgroundColor = "lightgrey";
-    sectorInput.style.backgroundColor = "darkgrey";
-    blockInput.style.backgroundColor = "darkgrey";
-    plotInput.style.backgroundColor = "darkgrey";
+    // Initialize input states
+    function initializeInputs() {
+        nodeInput.style.backgroundColor = "lightgrey";
+        sectorInput.style.backgroundColor = "darkgrey";
+        blockInput.style.backgroundColor = "darkgrey";
+        plotInput.style.backgroundColor = "darkgrey";
 
-    sectorInput.disabled = true;
-    blockInput.disabled = true;
-    plotInput.disabled = true;
+        sectorInput.disabled = true;
+        blockInput.disabled = true;
+        plotInput.disabled = true;
 
-    // Fetch initial data
+        fetchDropdownData(); // Reinitialize autocomplete for Node_Name
+    }
+
+    // Clear button functionality
+    clearButton.addEventListener("click", function () {
+        // Reset input values
+        nodeInput.value = "";
+        sectorInput.value = "";
+        blockInput.value = "";
+        plotInput.value = "";
+
+        // Reinitialize inputs and autocomplete functionality
+        initializeInputs();
+    });
+
+    // Existing fetchDropdownData and autocomplete functions...
     fetchDropdownData();
 
-    // Autocomplete function 
+    // Fetch dropdown data with filters
+    function fetchDropdownData(filters = {}) {
+        const params = new URLSearchParams(filters).toString();
+
+        fetch(`/get_dropdown_values?${params}`)
+            .then(response => response.json())
+            .then(data => {
+                if (!filters.node_name) {
+                    autocompleteData.Node_Name = data.Node_Name || [];
+                    autocomplete(nodeInput, autocompleteData.Node_Name, sectorInput);
+                }
+                if (filters.node_name && !filters.sector) {
+                    autocompleteData.Sector = data.Sector || [];
+                    autocomplete(sectorInput, autocompleteData.Sector, blockInput);
+                }
+                if (filters.sector && !filters.block_name) {
+                    autocompleteData.Block_Name = data.Block_Name || [];
+                    autocomplete(blockInput, autocompleteData.Block_Name, plotInput);
+                }
+                if (filters.block_name) {
+                    autocompleteData.Plot_No = data.Plot_No || [];
+                    autocomplete(plotInput, autocompleteData.Plot_No, null);
+                }
+            })
+            .catch(err => console.error("Error fetching dropdown data:", err));
+    }
+
+    // Autocomplete function (unchanged from your code)
     function autocomplete(inp, data, nextField) {
         let currentFocus;
 
@@ -57,9 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             nextField.style.backgroundColor = "lightgrey";
                             fetchDropdownData(getFiltersForField(nextField));
                         }
-                        // Lock the current field after valid selection
                         inp.style.backgroundColor = "white";
-                        inp.disabled = true;
                     });
 
                     a.appendChild(b);
@@ -79,33 +119,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Fetch dropdown data with filters
-    function fetchDropdownData(filters = {}) {
-        const params = new URLSearchParams(filters).toString();
-
-        fetch(`/get_dropdown_values?${params}`)
-            .then(response => response.json())
-            .then(data => {
-                if (!filters.node_name) {
-                    autocompleteData.Node_Name = data.Node_Name || [];
-                    autocomplete(nodeInput, autocompleteData.Node_Name, sectorInput);
-                }
-                if (filters.node_name && !filters.sector) {
-                    autocompleteData.Sector = data.Sector || [];
-                    autocomplete(sectorInput, autocompleteData.Sector, blockInput);
-                }
-                if (filters.sector && !filters.block_name) {
-                    autocompleteData.Block_Name = data.Block_Name || [];
-                    autocomplete(blockInput, autocompleteData.Block_Name, plotInput);
-                }
-                if (filters.block_name) {
-                    autocompleteData.Plot_No = data.Plot_No || [];
-                    autocomplete(plotInput, autocompleteData.Plot_No, null);
-                }
-            })
-            .catch(err => console.error("Error fetching dropdown data:", err));
-    }
-
     // Get filters based on the field
     function getFiltersForField(field) {
         if (field === sectorInput) return { node_name: nodeInput.value };
@@ -113,13 +126,32 @@ document.addEventListener("DOMContentLoaded", function () {
         if (field === plotInput) return { node_name: nodeInput.value, sector: sectorInput.value, block_name: blockInput.value };
         return {};
     }
+
+    // Initialize inputs on page load
+    initializeInputs();
 });
+
+
+
 
 
 
     // Add an event listener to submit the form
 document.getElementById("plotForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent the default form submission
+    // const formData = document.getElementById("plotForm")
+    const nodeInput = document.getElementById("node_name");
+    const sectorInput = document.getElementById("sector_no");
+    const blockInput = document.getElementById("block_name");
+    const plotInput = document.getElementById("plot_name");
+
+
+    nodeInput.disabled = false;
+    sectorInput.disabled = false;
+    blockInput.disabled = false;
+    plotInput.disabled = false;
+
+
     submitFormData(); // Call the function to send the form data using XHR
 });
 
@@ -134,7 +166,7 @@ function submitFormData() {
 
 
 
-// {}for owner
+    // {}for owner
 
     // Process the Owner table data
     const ownerRows = document.querySelectorAll("#transferDetails table tr");
@@ -159,7 +191,7 @@ function submitFormData() {
 
 
 
-// {}for owner
+    // {}for owner
 
 
 
