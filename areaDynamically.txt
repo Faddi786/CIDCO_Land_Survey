@@ -1,0 +1,54 @@
+//created a dynamically viewing of area in the form of QC & validator 
+
+//html
+            <h2> Area </h2>
+            <table id="dimensionsTable" border="1">
+                <thead>
+                    <tr>
+                        <th>Row</th>
+                        <th>Length</th>
+                        <th>Width</th>
+                        <th>Area</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be populated here -->
+                </tbody>
+            </table>
+
+//js
+// area details of plot
+
+            const area = data.area;
+            console.log(area);
+
+            const parsedAreaData = area.split(',').map((entry, index) => {
+                const [dimensions, area] = entry.split('=');
+                const[side1,side2] = dimensions.split('x')
+                return {
+                    row: `Area ${index + 1}`,
+                    side1,side2,
+                    area
+                };
+            });
+
+            const AreatableBody = document.querySelector("#dimensionsTable tbody");
+
+            parsedAreaData.forEach(({ row, side1, side2, area ,index}) => {
+                const rowElement = document.createElement("tr");
+            
+                rowElement.innerHTML = `
+                    <td>${row}</td>
+                    <td>
+                        <input type="number" id="length${index}" value="${side1}" 
+                            placeholder="Enter Length" oninput="updateArea(${index})" required>
+                    </td>
+                    <td>
+                        <input type="number" id="width${index}" value="${side2}" 
+                            placeholder="Enter Width" oninput="updateArea(${index})" required>
+                    </td>
+                    <td id="area${index}">${area}</td>
+                `;
+            
+                AreatableBody.appendChild(rowElement);
+            });
